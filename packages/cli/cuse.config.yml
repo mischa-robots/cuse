@@ -1,0 +1,8 @@
+version: 1.0.0
+project:
+  name: cli
+computers:
+  - identifier: cuse_dev_cli
+    os: linux
+  - identifier: falling_shape
+    os: linux

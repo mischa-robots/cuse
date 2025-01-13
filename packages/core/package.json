@@ -1,0 +1,43 @@
+{
+	"name": "@cuse/core",
+	"description": "Core library for implementing computer usage capabilities for AI agents",
+	"keywords": [
+		"cuse",
+		"ai",
+		"agents",
+		"computer-use"
+	],
+	"version": "0.0.1",
+	"author": "Matteo von Haxthausen",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cuse-dev/cuse.git"
+	},
+	"private": false,
+	"type": "module",
+	"main": "dist/index.js",
+	"module": "src/index.ts",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "bun build index.ts --outdir dist && tsc --project tsconfig.json",
+		"check-types": "tsc --noEmit",
+		"generate-client": "bunx @hey-api/openapi-ts -c @hey-api/client-fetch -i src/openapi.json -o src/Client"
+	},
+	"dependencies": {
+		"@ai-sdk/anthropic": "^1.0.5",
+		"@hey-api/client-fetch": "^0.6.0"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.0.0",
+		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
+}
