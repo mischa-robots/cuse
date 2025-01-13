@@ -27,7 +27,7 @@ npm install @cuse/core
 Create a `Computer` instance
 
 ```typescript
-import { Computer } from "@cuse/core";
+import { Computer } from '@cuse/core';
 
 const computer = new Computer();
 ```
@@ -38,12 +38,12 @@ Use the `computer.tools` in your AI SDK tool parameter
 const tools = computer.tools;
 
 const stream = streamText({
-	model: anthropic("claude-3-5-sonnet-latest"),
-	messages,
-	tools: {
-		...computer.tools,
-	},
-	maxSteps: 30,
+  model: anthropic('claude-3-5-sonnet-latest'),
+  messages,
+  tools: {
+    ...computer.tools,
+  },
+  maxSteps: 30,
 });
 ```
 

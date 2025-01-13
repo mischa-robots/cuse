@@ -1,11 +1,11 @@
-import React from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Paperclip } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Paperclip } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 interface UserMessageProps {
-  content: string
-  file?: string
+  content: string;
+  file?: string;
 }
 
 const UserMessage: React.FC<UserMessageProps> = ({ content, file }) => {
@@ -25,8 +25,7 @@ const UserMessage: React.FC<UserMessageProps> = ({ content, file }) => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default UserMessage
-
+export default UserMessage;

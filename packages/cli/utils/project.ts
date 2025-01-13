@@ -1,87 +1,87 @@
-import fs from "fs";
-import path from "path";
-import yaml from "yaml";
+import fs from 'fs';
+import path from 'path';
+import yaml from 'yaml';
 
 export interface ComputerConfig {
-	identifier: string;
-	os: string;
-	template?: string;
+  identifier: string;
+  os: string;
+  template?: string;
 }
 
 export interface CuseConfig {
-	version: string;
-	project: {
-		name: string;
-		description?: string;
-	};
-	computers: ComputerConfig[];
+  version: string;
+  project: {
+    name: string;
+    description?: string;
+  };
+  computers: ComputerConfig[];
 }
 
 const DEFAULT_CONFIG: CuseConfig = {
-	version: "1.0.0",
-	project: {
-		name: path.basename(process.cwd()),
-	},
-	computers: [],
+  version: '1.0.0',
+  project: {
+    name: path.basename(process.cwd()),
+  },
+  computers: [],
 };
 
 export function getConfigPath(): string {
-	return path.join(process.cwd(), "cuse.config.yml");
+  return path.join(process.cwd(), 'cuse.config.yml');
 }
 
 export function configExists(): boolean {
-	return fs.existsSync(getConfigPath());
+  return fs.existsSync(getConfigPath());
 }
 
 export function readConfig(): CuseConfig {
-	const configPath = getConfigPath();
-	if (!configExists()) {
-		return DEFAULT_CONFIG;
-	}
+  const configPath = getConfigPath();
+  if (!configExists()) {
+    return DEFAULT_CONFIG;
+  }
 
-	const configFile = fs.readFileSync(configPath, "utf8");
-	return yaml.parse(configFile);
+  const configFile = fs.readFileSync(configPath, 'utf8');
+  return yaml.parse(configFile);
 }
 
 export function writeConfig(config: CuseConfig): void {
-	const configPath = getConfigPath();
-	fs.writeFileSync(configPath, yaml.stringify(config));
+  const configPath = getConfigPath();
+  fs.writeFileSync(configPath, yaml.stringify(config));
 }
 
 export function addComputer(computer: ComputerConfig): void {
-	const config = readConfig();
-	const existingIndex = config.computers.findIndex(
-		(c) => c.identifier === computer.identifier
-	);
+  const config = readConfig();
+  const existingIndex = config.computers.findIndex(
+    (c) => c.identifier === computer.identifier
+  );
 
-	if (existingIndex >= 0) {
-		config.computers[existingIndex] = computer;
-	} else {
-		config.computers.push(computer);
-	}
+  if (existingIndex >= 0) {
+    config.computers[existingIndex] = computer;
+  } else {
+    config.computers.push(computer);
+  }
 
-	writeConfig(config);
+  writeConfig(config);
 }
 
 export function removeComputer(identifier: string): void {
-	const config = readConfig();
-	config.computers = config.computers.filter(
-		(c) => c.identifier !== identifier
-	);
-	writeConfig(config);
+  const config = readConfig();
+  config.computers = config.computers.filter(
+    (c) => c.identifier !== identifier
+  );
+  writeConfig(config);
 }
 
 export function getComputer(identifier: string): ComputerConfig | undefined {
-	const config = readConfig();
-	return config.computers.find((c) => c.identifier === identifier);
+  const config = readConfig();
+  return config.computers.find((c) => c.identifier === identifier);
 }
 
 export function getAllComputers(): ComputerConfig[] {
-	const config = readConfig();
-	return config.computers;
+  const config = readConfig();
+  return config.computers;
 }
 
 export function getProjectName(): string {
-	const config = readConfig();
-	return config.project.name;
+  const config = readConfig();
+  return config.project.name;
 }

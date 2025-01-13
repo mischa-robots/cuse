@@ -1,18 +1,23 @@
-import React from 'react'
-import { Button } from "@/components/ui/button"
-import { Copy, RotateCcw } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
-import { ToolInvocation } from 'ai'
-import ToolMessage from './ToolMessage'
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Copy, RotateCcw } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { ToolInvocation } from 'ai';
+import ToolMessage from './ToolMessage';
 
 interface AIMessageProps {
-  content: string
-  toolInvocations: ToolInvocation[] | undefined
-  onCopy: () => void
-  onRegenerate: () => void
+  content: string;
+  toolInvocations: ToolInvocation[] | undefined;
+  onCopy: () => void;
+  onRegenerate: () => void;
 }
 
-const AIMessage: React.FC<AIMessageProps> = ({ content, toolInvocations, onCopy, onRegenerate }) => {
+const AIMessage: React.FC<AIMessageProps> = ({
+  content,
+  toolInvocations,
+  onCopy,
+  onRegenerate,
+}) => {
   return (
     <div className="mb-4">
       <div className="rounded-lg max-w-[80%]">
@@ -22,13 +27,15 @@ const AIMessage: React.FC<AIMessageProps> = ({ content, toolInvocations, onCopy,
       </div>
       <div className="flex flex-col w-fit mt-4">
         {toolInvocations
-          ?.filter((toolInvocation) => 
-            toolInvocation.state == "result"
-          )
+          ?.filter((toolInvocation) => toolInvocation.state == 'result')
           .map((toolInvocation) => (
             <ToolMessage
               key={toolInvocation.toolCallId}
-              content={typeof toolInvocation.result == "string" ? toolInvocation.result : "Took screenshot"}
+              content={
+                typeof toolInvocation.result == 'string'
+                  ? toolInvocation.result
+                  : 'Took screenshot'
+              }
             />
           ))}
       </div>
@@ -41,8 +48,7 @@ const AIMessage: React.FC<AIMessageProps> = ({ content, toolInvocations, onCopy,
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AIMessage
-
+export default AIMessage;

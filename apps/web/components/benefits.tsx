@@ -1,4 +1,4 @@
-import { PersonStanding, Shield, Timer, Zap, ZoomIn } from "lucide-react";
+import { PersonStanding, Shield, Timer, Zap, ZoomIn } from 'lucide-react';
 
 const Benefits = () => {
   return (
@@ -21,7 +21,8 @@ const Benefits = () => {
                 <span className="absolute -left-px hidden h-6 w-px bg-primary md:inline-block"></span>
               </h3>
               <p className="text-sm text-muted-foreground md:text-base">
-                Use the CLI to quickly set up your project and start implementing computer use.
+                Use the CLI to quickly set up your project and start
+                implementing computer use.
               </p>
             </div>
           </div>
@@ -35,7 +36,8 @@ const Benefits = () => {
                 <span className="absolute -left-px hidden h-6 w-px bg-primary md:inline-block"></span>
               </h3>
               <p className="text-sm text-muted-foreground md:text-base">
-                Cuse is open source and available for everyone to use and contribute to.
+                Cuse is open source and available for everyone to use and
+                contribute to.
               </p>
             </div>
           </div>
@@ -49,7 +51,8 @@ const Benefits = () => {
                 <span className="absolute -left-px hidden h-6 w-px bg-primary md:inline-block"></span>
               </h3>
               <p className="text-sm text-muted-foreground md:text-base">
-                Focus on implementing your application and let us handle the rest.
+                Focus on implementing your application and let us handle the
+                rest.
               </p>
             </div>
           </div>
