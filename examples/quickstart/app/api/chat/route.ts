@@ -1,13 +1,11 @@
 import { streamText, type CoreTool } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
-import { Computer } from '@cuse/core';
+import { Computer } from '@cusedev/core';
 
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
-
-  console.log(messages);
 
   const system = `<SYSTEM_CAPABILITY>
   * You are utilising an Ubuntu virtual machine using x86_64 architecture with internet access.
@@ -37,7 +35,18 @@ export async function POST(req: Request) {
   * If the item you are looking at is a pdf, if after taking a single screenshot of the pdf it seems that you want to read the entire document instead of trying to continue to read the pdf from your screenshots + navigation, determine the URL, use curl to download the pdf, install and use pdftotext to convert it to a text file, and then read that text file directly with your StrReplaceEditTool.
   </IMPORTANT>`;
 
-  const computer = new Computer({});
+  const computer = new Computer({
+    config: {
+      baseUrl:
+        process.env.COMPUTER_URL || 'http://localhost:4242/quickstart-computer',
+      display: {
+        number: 1,
+        width: 1024,
+        height: 768,
+      },
+    },
+    apps: {},
+  });
 
   const result = streamText({
     model: anthropic('claude-3-5-sonnet-latest'),
@@ -54,61 +63,70 @@ export async function POST(req: Request) {
         displayHeightPx: 768,
         execute: async ({ action, coordinate, text }) => {
           switch (action) {
-            case "screenshot":
-              const screenshot = await computer.system.computerTakeScreenshot();
+            case 'screenshot':
+              const screenshot = await computer.system.display.getScreenshot();
               return {
-                type: "image",
-                image: screenshot.data!,
+                type: 'image',
+                image: screenshot.data,
               };
-            case "key":
+            case 'key':
               if (!text) {
-                return "No key provided";
+                return 'No key provided';
               }
-              await computer.system.computerPressKey({ body: { key: text } });
-              return "Pressed keys";
-            case "type":
+              await computer.system.keyboard.pressKey({ key: text });
+              return 'Pressed keys';
+            case 'type':
               if (!text) {
-                return "No text provided";
+                return 'No text provided';
               }
-              await computer.system.computerTypeText({ body: { text } });
-              return "Typed text";
-            case "mouse_move":
+              await computer.system.keyboard.type({ text });
+              return 'Typed text';
+            case 'mouse_move':
               if (coordinate) {
-                await computer.system.computerMoveCursor({ body: { x: coordinate[0], y: coordinate[1] } });
-                return "Moved mouse";
+                await computer.system.mouse.move({
+                  x: coordinate[0],
+                  y: coordinate[1],
+                });
+                return 'Moved mouse';
               }
-              return "Invalid coordinate";
-            case "left_click":
-              await computer.system.computerLeftClick();
-              return "Left clicked";
-            case "right_click":
-              await computer.system.computerRightClick();
-              return "Right clicked";
-            case "middle_click":
-              await computer.system.computerMiddleClick();
-              return "Middle clicked";
-            case "double_click":
-              await computer.system.computerDoubleClick();
-              return "Double clicked";
-            case "cursor_position":
-              const position = await computer.system.computerGetCursorPosition();
-              return `Cursor position: X=${position.data!.x}, Y=${position.data!.y}`;
+              return 'Invalid coordinate';
+            case 'left_click':
+              await computer.system.mouse.leftClick();
+              return 'Left clicked';
+            case 'right_click':
+              await computer.system.mouse.rightClick();
+              return 'Right clicked';
+            case 'middle_click':
+              await computer.system.mouse.middleClick();
+              return 'Middle clicked';
+            case 'double_click':
+              await computer.system.mouse.doubleClick();
+              return 'Double clicked';
+            case 'cursor_position':
+              const position = await computer.system.mouse.getPosition();
+              return `Cursor position: X=${position.x}, Y=${position.y}`;
             default:
-              return "Invalid action";
+              return 'Invalid action';
           }
         },
         experimental_toToolResultContent(result) {
-          return typeof result === "string"
-            ? [{ type: "text", text: result }]
-            : [{ type: "image", data: result.image, mimeType: "image/png" }];
+          return typeof result === 'string'
+            ? [{ type: 'text', text: result }]
+            : [
+                {
+                  type: 'image',
+                  data: result.image.toString('base64'),
+                  mimeType: 'image/png',
+                },
+              ];
         },
       }),
       bash: anthropic.tools.bash_20241022({
         execute: async ({ command, restart }) => {
           if (restart) {
-            await computer.system.bashRestartSystem();
+            await computer.system.bash.restart();
           }
-          return await computer.system.bashExecuteCommand({ body: { command } });
+          return await computer.system.bash.execute({ command });
         },
       }),
       str_replace_editor: anthropic.tools.textEditor_20241022({
@@ -122,39 +140,47 @@ export async function POST(req: Request) {
           view_range,
         }) => {
           switch (command) {
-            case "view":
-              return await computer.system.editorViewFile({ body: { path, view_range: view_range as [number, number] } });
-            case "create":
-              await computer.system.editorCreateFile({ body: { path, file_text: file_text as string } });
-              return "Created file";
-            case "insert":
-              if (!file_text) {
-                return "No file text provided";
-              }
-              await computer.system.editorInsertText({ 
-                body: { 
-                  path, 
-                  text: file_text, 
-                  ...(insert_line !== undefined && { insert_line })
-                } 
+            case 'view':
+              return await computer.system.editor.viewFile({
+                path,
+                viewRange: view_range as [number, number] | undefined,
               });
-              return "Inserted text";
-            case "str_replace":
-              if (!old_str || !new_str) {
-                return "No old or new string provided";
+            case 'create':
+              await computer.system.editor.createFile({
+                path,
+                content: file_text as string,
+              });
+              return 'Created file';
+            case 'insert':
+              if (!file_text) {
+                return 'No file text provided';
               }
-              await computer.system.editorReplaceString({ body: { path, old_str, new_str } });
-              return "Replaced text";
-            case "undo_edit":
-              await computer.system.editorUndoLastEdit({ body: { path } });
-              return "Undid edit";
+              await computer.system.editor.insertText({
+                path,
+                text: file_text,
+                line: insert_line as number,
+              });
+              return 'Inserted text';
+            case 'str_replace':
+              if (!old_str || !new_str) {
+                return 'No old or new string provided';
+              }
+              await computer.system.editor.replaceString({
+                path,
+                oldStr: old_str,
+                newStr: new_str,
+              });
+              return 'Replaced text';
+            case 'undo_edit':
+              await computer.system.editor.undoLastEdit();
+              return 'Undid edit';
             default:
-              return "Invalid command";
+              return 'Invalid command';
           }
         },
       }),
     } as Record<string, CoreTool>,
-    maxSteps: 30,
+    maxSteps: 99,
   });
 
   return result.toDataStreamResponse();
