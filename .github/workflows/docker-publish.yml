@@ -1,12 +1,11 @@
 name: Docker Build and Publish
 
 on:
-  workflow_run:
-    workflows: ['Release']
-    types:
-      - completed
+  push:
     branches:
       - main
+    paths:
+      - 'platforms/linux/**'
 
 env:
   REGISTRY: ghcr.io
