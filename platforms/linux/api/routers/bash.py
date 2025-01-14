@@ -13,6 +13,8 @@ async def command(command: str) -> str:
 @router.post("/restart")
 async def restart() -> None:
     try:
-        raise Exception("Not implemented")
+        subprocess.run(["sudo", "reboot"], check=True)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to restart: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
