@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, RotateCcw } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { ToolInvocation } from 'ai';
+import type { ToolInvocation } from 'ai';
 import ToolMessage from './ToolMessage';
 
 interface AIMessageProps {
