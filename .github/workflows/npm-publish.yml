@@ -26,7 +26,7 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun run build --filter=@cuse/cli
+        run: bun run build --filter=@cusedev/cli
 
       - name: Auto-increment version and create tag
         working-directory: packages/cli

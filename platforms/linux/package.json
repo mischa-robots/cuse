@@ -1,7 +1,8 @@
 {
-  "name": "@cuse/linux",
-  "version": "0.0.1",
+  "name": "@cusedev/linux",
+  "version": "0.1.0",
   "main": "api/main.py",
+  "private": true,
   "scripts": {
     "build": "echo 'No build step required'",
     "lint": "echo 'No lint step required'"

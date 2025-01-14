@@ -15,19 +15,19 @@
 Setup and start the Linux Ubuntu instance:
 
 ```bash
-npx @cuse/cli start
+npx @cusedev/cli start
 ```
 
 Install the Cuse package:
 
 ```bash
-npm install @cuse/core
+npm install @cusedev/core
 ```
 
 Create a `Computer` instance
 
 ```typescript
-import { Computer } from '@cuse/core';
+import { Computer } from '@cusedev/core';
 
 const computer = new Computer();
 ```
