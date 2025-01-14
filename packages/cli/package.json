@@ -19,9 +19,7 @@
     "dist"
   ],
   "publishConfig": {
-    "ignore": [
-      "@cusedev/linux"
-    ]
+    "access": "public"
   },
   "scripts": {
     "build": "bun build --target node ./index.ts --outdir dist && shx cp -r templates dist/"
