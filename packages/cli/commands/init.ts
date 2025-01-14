@@ -1,14 +1,13 @@
-import type { Arguments } from 'yargs';
+import type { Arguments, Argv } from 'yargs';
 import inquirer from 'inquirer';
-import type { CommandModule } from './types';
+import type { BaseOptions, CommandModule } from './types';
 import { configExists, writeConfig, type CuseConfig } from '../utils/project';
 import { setupProxy } from '../utils/proxy';
 import { PROXY_PORT } from '../config';
 
-interface InitOptions {
+interface InitOptions extends BaseOptions {
   force?: boolean;
   yes?: boolean;
-  [key: string]: unknown;
 }
 
 export const initCommand: CommandModule<InitOptions> = {
@@ -25,7 +24,7 @@ export const initCommand: CommandModule<InitOptions> = {
         alias: 'y',
         type: 'boolean',
         description: 'Skip confirmation prompts',
-      });
+      }) as Argv<InitOptions>;
   },
   async handler(argv: Arguments<InitOptions>) {
     const { force, yes } = argv;
@@ -52,12 +51,13 @@ export const initCommand: CommandModule<InitOptions> = {
       }
     }
 
+    const defaultProjectName = process.cwd().split('/').pop();
     const { projectName, description } = await inquirer.prompt([
       {
         type: 'input',
         name: 'projectName',
         message: 'Project name:',
-        default: process.cwd().split('/').pop(),
+        ...(defaultProjectName ? { default: defaultProjectName } : {}),
       },
       {
         type: 'input',

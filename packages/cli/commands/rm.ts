@@ -16,7 +16,7 @@ interface RmOptions extends BaseOptions {
 export const rmCommand: CommandModule<RmOptions> = {
   command: 'rm <identifier>',
   describe: 'Remove a specific cuse computer',
-  builder: (yargs: Argv<BaseOptions>) => {
+  builder: (yargs) => {
     return yargs
       .positional('identifier', {
         type: 'string',

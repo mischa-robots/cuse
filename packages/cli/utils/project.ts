@@ -5,7 +5,7 @@ import yaml from 'yaml';
 export interface ComputerConfig {
   identifier: string;
   os: string;
-  template?: string;
+  template?: string | undefined;
 }
 
 export interface CuseConfig {

@@ -1,5 +1,5 @@
 import type { Arguments } from 'yargs';
-import type { CommandModule } from './types';
+import type { BaseOptions, CommandModule } from './types';
 import { startComputer } from '../utils/docker';
 import {
   chooseOS,
@@ -41,12 +41,11 @@ async function checkEndpoint(
   return false;
 }
 
-interface NewOptions {
+interface NewOptions extends BaseOptions {
   computerName?: string;
   template?: string;
   platform?: string;
   config?: string;
-  [key: string]: unknown;
 }
 
 export const newCommand: CommandModule<NewOptions> = {

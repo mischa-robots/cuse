@@ -1,15 +1,14 @@
-import type { Arguments } from 'yargs';
-import type { CommandModule } from './types';
+import type { Arguments, Argv } from 'yargs';
+import type { BaseOptions, CommandModule } from './types';
 import { startComputer } from '../utils/docker';
 import { configExists, getAllComputers } from '../utils/project';
 import { printComputerTable } from '../utils/print';
 import { setupProxy } from '../utils/proxy';
 
-interface StartOptions {
+interface StartOptions extends BaseOptions {
   identifier?: string;
   detached?: boolean;
   force?: boolean;
-  [key: string]: unknown;
 }
 
 export const startCommand: CommandModule<StartOptions> = {
@@ -29,7 +28,7 @@ export const startCommand: CommandModule<StartOptions> = {
       .option('force', {
         type: 'boolean',
         description: 'Force a restart if already running',
-      });
+      }) as Argv<StartOptions>;
   },
   async handler(argv: Arguments<StartOptions>) {
     const { identifier, force } = argv;

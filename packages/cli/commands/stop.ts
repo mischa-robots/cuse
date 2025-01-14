@@ -1,19 +1,13 @@
 import { execa } from 'execa';
-import type { Arguments } from 'yargs';
-import type { CommandModule } from './types';
+import type { BaseOptions, CommandModule } from './types';
 import { configExists, readConfig } from '../utils/project';
-import { getAllRunningComputers } from '../utils/docker';
 import { stopProxy } from '../utils/proxy';
 
-interface StopOptions {
-  [key: string]: unknown;
-}
-
-export const stopCommand: CommandModule<StopOptions> = {
+export const stopCommand: CommandModule<BaseOptions> = {
   command: 'stop',
   describe:
     'Stop all running computers and the proxy server for the current project',
-  async handler(argv: Arguments<StopOptions>) {
+  async handler() {
     if (!configExists()) {
       console.error('No cuse configuration found in this directory.');
       console.info("Run 'cuse init' to initialize a new configuration.");

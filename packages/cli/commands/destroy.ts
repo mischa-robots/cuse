@@ -3,11 +3,12 @@ import type { Arguments, CommandModule } from './types';
 import { cleanAllComputers } from '../utils/docker';
 import { configExists, getAllComputers } from '../utils/project';
 import { stopProxy } from '../utils/proxy';
+import type { BaseOptions } from './types';
+import type { Argv } from 'yargs';
 
-interface DestroyOptions {
+interface DestroyOptions extends BaseOptions {
   force?: boolean;
   yes?: boolean;
-  [key: string]: unknown;
 }
 
 export const destroyCommand: CommandModule<DestroyOptions> = {
@@ -24,7 +25,7 @@ export const destroyCommand: CommandModule<DestroyOptions> = {
         alias: 'y',
         type: 'boolean',
         description: 'Skip confirmation prompts',
-      });
+      }) as Argv<DestroyOptions>;
   },
   async handler(argv: Arguments<DestroyOptions>) {
     if (!configExists()) {
