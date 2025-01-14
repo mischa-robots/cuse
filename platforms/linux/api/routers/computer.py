@@ -3,6 +3,25 @@ import subprocess
 import base64
 from fastapi import APIRouter, HTTPException
 from typing import Dict
+from pydantic import BaseModel
+
+class TypeTextRequest(BaseModel):
+    text: str
+    display_num: int = 1
+    typing_delay: int = 12
+    typing_group_size: int = 50
+
+class KeyPressRequest(BaseModel):
+    key: str
+    display_num: int = 1
+
+class MouseMoveRequest(BaseModel):
+    x: int
+    y: int
+    display_num: int = 1
+
+class DisplayRequest(BaseModel):
+    display_num: int = 1
 
 router = APIRouter(prefix="/computer", tags=["computer"])
 
@@ -19,53 +38,53 @@ async def screenshot(display_num: int = 1) -> str:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/key")
-async def key(key: str, display_num: int = 1) -> None:
+async def key(body: KeyPressRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool key -- {key}")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool key -- {body.key}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/type")
-async def type_text(text: str, display_num: int = 1, typing_delay: int = 12, typing_group_size: int = 50) -> None:
+async def type_text(body: TypeTextRequest) -> None:
     try:
-        groups = text.split(f".{1,typing_group_size}")
+        groups = body.text.split(f".{1,body.typing_group_size}")
         for group in groups:
-            subprocess.getoutput(f"DISPLAY=:{display_num} xdotool type --delay {typing_delay} -- {group}")
+            subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool type --delay {body.typing_delay} -- {group}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/mouse-move")
-async def mouse_move(x: int, y: int, display_num: int = 1) -> None:
+async def mouse_move(body: MouseMoveRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool mousemove --sync {x} {y}")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool mousemove --sync {body.x} {body.y}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/left-click")
-async def left_click(display_num: int = 1) -> None:
+async def left_click(body: DisplayRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool click --repeat 1 --delay 100 1")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool click --repeat 1 --delay 100 1")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/right-click")
-async def right_click(display_num: int = 1) -> None:
+async def right_click(body: DisplayRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool click --repeat 1 --delay 100 3")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool click --repeat 1 --delay 100 3")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/middle-click")
-async def middle_click(display_num: int = 1) -> None:
+async def middle_click(body: DisplayRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool click --repeat 1 --delay 100 2")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool click --repeat 1 --delay 100 2")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/double-click")
-async def double_click(display_num: int = 1) -> None:
+async def double_click(body: DisplayRequest) -> None:
     try:
-        subprocess.getoutput(f"DISPLAY=:{display_num} xdotool click --repeat 2 --delay 100 1")
+        subprocess.getoutput(f"DISPLAY=:{body.display_num} xdotool click --repeat 2 --delay 100 1")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
