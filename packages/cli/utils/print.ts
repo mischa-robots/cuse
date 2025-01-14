@@ -1,12 +1,17 @@
 import type { ComputerInfo } from './docker';
 
-export function printComputerTable(
-  computers: ComputerInfo[] | Array<any>
-): void {
+export function printComputerTable(computers: ComputerInfo[]): void {
   if (!computers.length) {
     console.info('No computers found.');
     return;
   }
 
-  console.table(computers);
+  console.table(
+    computers.map((c) => ({
+      identifier: c.identifier,
+      os: c.os,
+      containerId: c.containerId,
+      api: c.api,
+    }))
+  );
 }

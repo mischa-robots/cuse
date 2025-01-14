@@ -65,9 +65,12 @@ export async function POST(req: Request) {
           switch (action) {
             case 'screenshot':
               const screenshot = await computer.system.display.getScreenshot();
+
               return {
                 type: 'image',
-                image: screenshot.data,
+                image: await screenshot
+                  .arrayBuffer()
+                  .then((buffer) => Buffer.from(buffer)),
               };
             case 'key':
               if (!text) {

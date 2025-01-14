@@ -1,0 +1,44 @@
+name: NPM Publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/cli/**'
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        working-directory: packages/cli
+        run: npm ci
+
+      - name: Build
+        working-directory: packages/cli
+        run: npm run build
+
+      - name: Bump patch version
+        working-directory: packages/cli
+        run: npm version patch
+
+      - name: Publish to NPM
+        working-directory: packages/cli
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

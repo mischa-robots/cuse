@@ -11,21 +11,20 @@ export class Display implements DisplayInterface {
 
   /**
    * Capture a screenshot of the current display state
-   * @returns Promise resolving to screenshot data as a Buffer
+   * @returns Promise resolving to screenshot data as a File or Blob
    * @throws Error if screenshot capture fails or response is empty
    */
-  async getScreenshot(): Promise<{ data: Buffer }> {
+  async getScreenshot(): Promise<File | Blob> {
     const response = await handleResponse(
       client.computerTakeScreenshot({
-        body: { display_num: this.config.displayNum },
+        query: { display_num: this.config.displayNum },
       })
     );
 
     if (!response) {
-      throw new Error('Screenshot response is empty');
+      throw new Error('Failed to capture screenshot');
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    return { data: Buffer.from(arrayBuffer) };
+    return response;
   }
 }

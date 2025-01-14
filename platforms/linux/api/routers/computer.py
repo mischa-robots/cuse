@@ -2,8 +2,10 @@ import os
 import subprocess
 import base64
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from typing import Dict
 from pydantic import BaseModel
+import io
 
 class TypeTextRequest(BaseModel):
     text: str
@@ -26,14 +28,27 @@ class DisplayRequest(BaseModel):
 router = APIRouter(prefix="/computer", tags=["computer"])
 
 @router.get("/screenshot")
-async def screenshot(display_num: int = 1) -> str:
+async def screenshot(display_num: int = 1):
     try:
-        path = f"./screenshot_{subprocess.getoutput('date +%Y-%m-%dT%H:%M:%S')}.png"
-        subprocess.getoutput(f"DISPLAY=:{display_num} scrot -p {path}")
-        with open(path, 'rb') as image_file:
-            image = base64.b64encode(image_file.read()).decode('utf-8')
-        os.remove(path)
-        return image
+        # Capture screenshot directly to memory using subprocess PIPE
+        result = subprocess.run(
+            f"DISPLAY=:{display_num} scrot -", 
+            shell=True, 
+            capture_output=True
+        )
+        if result.returncode != 0:
+            raise Exception(f"Screenshot failed: {result.stderr.decode()}")
+            
+        # Create an in-memory bytes buffer
+        image_bytes = io.BytesIO(result.stdout)
+        
+        return StreamingResponse(
+            image_bytes,
+            media_type="image/png",
+            headers={
+                "Content-Disposition": "attachment; filename=screenshot.png"
+            }
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
