@@ -25,8 +25,7 @@ async def create(path: str, file_text: Optional[str] = None) -> None:
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w') as file:
-            if file_text:
-                file.write(file_text)
+            file.write(file_text or '')
     except FileExistsError:
         raise HTTPException(status_code=400, detail=f"File already exists: {path}")
     except Exception as e:
