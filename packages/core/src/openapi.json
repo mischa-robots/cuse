@@ -289,7 +289,7 @@
           "Computer"
         ],
         "summary": "Take a Screenshot",
-        "description": "Captures and returns a screenshot from the specified display.",
+        "description": "Captures and returns a screenshot from the specified display as a PNG file.",
         "operationId": "computerTakeScreenshot",
         "parameters": [
           {
@@ -300,15 +300,10 @@
           "200": {
             "description": "Screenshot captured successfully.",
             "content": {
-              "application/json": {
+              "image/png": {
                 "schema": {
                   "type": "string",
                   "format": "binary"
-                },
-                "examples": {
-                  "ExampleScreenshotResponse": {
-                    "$ref": "#/components/examples/ExampleScreenshotResponse"
-                  }
                 }
               }
             }
@@ -317,7 +312,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
-        "x-implementation-details": "The implementation should handle capturing the entire screen of the specified display. The screenshot data should be returned as a base64-encoded binary string. Ensure that the display number is valid and available."
+        "x-implementation-details": "The implementation captures the entire screen of the specified display and returns it as a PNG file."
       }
     },
     "/computer/key": {

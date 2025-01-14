@@ -83,7 +83,7 @@ export interface KeyboardInterface {
  */
 export interface DisplayInterface {
   /** Take a screenshot of the current display state */
-  getScreenshot(): Promise<{ data: Buffer }>;
+  getScreenshot(): Promise<File | Blob>;
 }
 
 /**
