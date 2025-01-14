@@ -1,0 +1,10 @@
+{
+    "name": "@repo/docs",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "scripts": {
+        "dev": "bunx mintlify dev"
+    }
+  }
+  
