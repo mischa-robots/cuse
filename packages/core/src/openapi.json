@@ -36,7 +36,9 @@
   "paths": {
     "/editor/view": {
       "post": {
-        "tags": ["Editor"],
+        "tags": [
+          "Editor"
+        ],
         "summary": "View a file",
         "description": "View the contents of a file, optionally specifying a line range.",
         "operationId": "editorViewFile",
@@ -61,7 +63,9 @@
                     "description": "Start and end lines (inclusive)."
                   }
                 },
-                "required": ["path"]
+                "required": [
+                  "path"
+                ]
               }
             }
           }
@@ -95,7 +99,9 @@
     },
     "/editor/create": {
       "post": {
-        "tags": ["Editor"],
+        "tags": [
+          "Editor"
+        ],
         "summary": "Create a file",
         "description": "Create a new file with optional content.",
         "operationId": "editorCreateFile",
@@ -115,7 +121,9 @@
                     "description": "Optional content to place in the file."
                   }
                 },
-                "required": ["path"]
+                "required": [
+                  "path"
+                ]
               }
             }
           }
@@ -142,7 +150,9 @@
     },
     "/editor/str-replace": {
       "post": {
-        "tags": ["Editor"],
+        "tags": [
+          "Editor"
+        ],
         "summary": "Replace string in a file",
         "description": "Replace occurrences of a string in a file with another string.",
         "operationId": "editorReplaceString",
@@ -166,7 +176,11 @@
                     "description": "Replacement string."
                   }
                 },
-                "required": ["path", "old_str", "new_str"]
+                "required": [
+                  "path",
+                  "old_str",
+                  "new_str"
+                ]
               }
             }
           }
@@ -193,7 +207,9 @@
     },
     "/editor/insert": {
       "post": {
-        "tags": ["Editor"],
+        "tags": [
+          "Editor"
+        ],
         "summary": "Insert text into a file",
         "description": "Insert text into a specific line of a file.",
         "operationId": "editorInsertText",
@@ -217,7 +233,10 @@
                     "description": "Line number at which to insert text."
                   }
                 },
-                "required": ["path", "text"]
+                "required": [
+                  "path",
+                  "text"
+                ]
               }
             }
           }
@@ -244,7 +263,9 @@
     },
     "/editor/undo-edit": {
       "post": {
-        "tags": ["Editor"],
+        "tags": [
+          "Editor"
+        ],
         "summary": "Undo the last edit",
         "description": "Currently not implemented.",
         "operationId": "editorUndoLastEdit",
@@ -264,49 +285,46 @@
     },
     "/computer/screenshot": {
       "get": {
-        "tags": ["Computer"],
-        "summary": "Take a screenshot",
-        "description": "Captures a screenshot of the specified display and returns it as a base64-encoded string.",
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Take a Screenshot",
+        "description": "Captures and returns a screenshot from the specified display.",
         "operationId": "computerTakeScreenshot",
         "parameters": [
           {
-            "name": "display_num",
-            "in": "query",
-            "description": "Display number to capture the screenshot from.",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1
-            }
+            "$ref": "#/components/parameters/DisplayNumber"
           }
         ],
         "responses": {
           "200": {
-            "description": "Base64-encoded screenshot image.",
+            "description": "Screenshot captured successfully.",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "binary"
+                },
+                "examples": {
+                  "ExampleScreenshotResponse": {
+                    "$ref": "#/components/examples/ExampleScreenshotResponse"
+                  }
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-implementation-details": "The implementation should handle capturing the entire screen of the specified display. The screenshot data should be returned as a base64-encoded binary string. Ensure that the display number is valid and available."
       }
     },
     "/computer/key": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Press key",
         "description": "Presses a key on the specified display.",
         "operationId": "computerPressKey",
@@ -327,7 +345,9 @@
                     "description": "Display number on which to press the key."
                   }
                 },
-                "required": ["key"]
+                "required": [
+                  "key"
+                ]
               }
             }
           }
@@ -351,7 +371,9 @@
     },
     "/computer/type": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Type text",
         "description": "Types text on the specified display.",
         "operationId": "computerTypeText",
@@ -382,7 +404,9 @@
                     "description": "Number of characters typed between delays."
                   }
                 },
-                "required": ["text"]
+                "required": [
+                  "text"
+                ]
               }
             }
           }
@@ -406,7 +430,9 @@
     },
     "/computer/mouse-move": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Move mouse cursor",
         "description": "Moves the mouse cursor to the specified coordinates on the given display.",
         "operationId": "computerMoveCursor",
@@ -431,7 +457,10 @@
                     "description": "Display number on which to move the mouse."
                   }
                 },
-                "required": ["x", "y"]
+                "required": [
+                  "x",
+                  "y"
+                ]
               }
             }
           }
@@ -455,7 +484,9 @@
     },
     "/computer/left-click": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Perform left mouse click",
         "description": "Performs a left mouse click on the specified display.",
         "operationId": "computerLeftClick",
@@ -495,7 +526,9 @@
     },
     "/computer/right-click": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Perform right mouse click",
         "description": "Performs a right mouse click on the specified display.",
         "operationId": "computerRightClick",
@@ -535,7 +568,9 @@
     },
     "/computer/middle-click": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Perform middle mouse click",
         "description": "Performs a middle mouse click on the specified display.",
         "operationId": "computerMiddleClick",
@@ -575,7 +610,9 @@
     },
     "/computer/double-click": {
       "post": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Perform double click",
         "description": "Performs a double click with the left mouse button on the specified display.",
         "operationId": "computerDoubleClick",
@@ -615,7 +652,9 @@
     },
     "/computer/cursor-position": {
       "get": {
-        "tags": ["Computer"],
+        "tags": [
+          "Computer"
+        ],
         "summary": "Get cursor position",
         "description": "Gets the current position of the mouse cursor on the specified display.",
         "operationId": "computerGetCursorPosition",
@@ -665,7 +704,9 @@
     },
     "/bash/command": {
       "post": {
-        "tags": ["Bash"],
+        "tags": [
+          "Bash"
+        ],
         "summary": "Execute Bash Command",
         "description": "Executes a given bash command and returns the output.",
         "operationId": "bashExecuteCommand",
@@ -681,7 +722,9 @@
                     "description": "Bash command to execute."
                   }
                 },
-                "required": ["command"]
+                "required": [
+                  "command"
+                ]
               }
             }
           }
@@ -712,7 +755,9 @@
     },
     "/bash/restart": {
       "post": {
-        "tags": ["Bash"],
+        "tags": [
+          "Bash"
+        ],
         "summary": "Restart System",
         "description": "Restarts the system. Currently, this endpoint is not implemented.",
         "operationId": "bashRestartSystem",
@@ -740,6 +785,59 @@
             "type": "string"
           }
         }
+      }
+    },
+    "responses": {
+      "InternalServerError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HTTPError"
+            }
+          }
+        }
+      },
+      "FileNotFound": {
+        "description": "File not found"
+      }
+    },
+    "parameters": {
+      "DisplayNumber": {
+        "name": "display_num",
+        "in": "query",
+        "description": "Display number to operate on, defaults to 1.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 1
+        }
+      }
+    },
+    "examples": {
+      "ExampleFileViewRequest": {
+        "summary": "Example request for viewing a file",
+        "description": "Example of how to view a file with a line range specified.",
+        "value": {
+          "path": "/path/to/file.txt",
+          "view_range": [
+            1,
+            10
+          ]
+        }
+      },
+      "ExampleKeyPressRequest": {
+        "summary": "Example request to press a key",
+        "description": "Example of how to press the 'Enter' key on display 1.",
+        "value": {
+          "key": "Enter",
+          "display_num": 1
+        }
+      },
+      "ExampleScreenshotResponse": {
+        "summary": "Example screenshot response",
+        "description": "Example of a base64-encoded image returned from a screenshot request.",
+        "value": "iVBORw0KGgoAAAANSUhEUgAA...5CYII="
       }
     }
   }
