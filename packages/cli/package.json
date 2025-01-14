@@ -1,5 +1,5 @@
 {
-  "name": "@cuse/cli",
+  "name": "@cusedev/cli",
   "description": "CLI tool to manage cuse computers",
   "keywords": [
     "cuse",
@@ -18,6 +18,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "bun build --target node ./index.ts --outdir dist && shx cp -r templates dist/"
   },

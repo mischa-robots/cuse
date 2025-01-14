@@ -1,9 +1,9 @@
-import React from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Wrench } from 'lucide-react'
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Wrench } from 'lucide-react';
 
 interface ToolMessageProps {
-  content: string
+  content: string;
 }
 
 const ToolMessage: React.FC<ToolMessageProps> = ({ content }) => {
@@ -16,8 +16,7 @@ const ToolMessage: React.FC<ToolMessageProps> = ({ content }) => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default ToolMessage
-
+export default ToolMessage;

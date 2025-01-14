@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { FaDiscord } from "react-icons/fa";
+import { Button } from '@/components/ui/button';
+import { FaDiscord } from 'react-icons/fa';
 
 const Community = () => {
   return (
@@ -11,8 +11,9 @@ const Community = () => {
               Join the community
             </h1>
             <p className="text-muted-foreground md:text-lg">
-              Connect with our community to stay up to date with the latest news and updates.
-              Get in touch with us and other builders working on the same problems.
+              Connect with our community to stay up to date with the latest news
+              and updates. Get in touch with us and other builders working on
+              the same problems.
             </p>
             <div className="mt-11 flex flex-col justify-center gap-2 sm:flex-row">
               <Button size="lg" asChild>

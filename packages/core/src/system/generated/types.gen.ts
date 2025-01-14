@@ -4,6 +4,11 @@ export type HTTPError = {
     detail?: string;
 };
 
+/**
+ * Display number to operate on, defaults to 1.
+ */
+export type ParameterDisplayNumber = number;
+
 export type EditorViewFileData = {
     body: {
         /**
@@ -86,13 +91,13 @@ export type EditorInsertTextError = (unknown | HTTPError);
 export type ComputerTakeScreenshotData = {
     query?: {
         /**
-         * Display number to capture the screenshot from.
+         * Display number to operate on, defaults to 1.
          */
         display_num?: number;
     };
 };
 
-export type ComputerTakeScreenshotResponse = (string);
+export type ComputerTakeScreenshotResponse = ((Blob | File));
 
 export type ComputerTakeScreenshotError = (HTTPError);
 

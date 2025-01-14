@@ -61,8 +61,8 @@ export const editorUndoLastEdit = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * Take a screenshot
- * Captures a screenshot of the specified display and returns it as a base64-encoded string.
+ * Take a Screenshot
+ * Captures and returns a screenshot from the specified display.
  */
 export const computerTakeScreenshot = <ThrowOnError extends boolean = false>(options?: OptionsLegacyParser<ComputerTakeScreenshotData, ThrowOnError>) => {
     return (options?.client ?? client).get<ComputerTakeScreenshotResponse, ComputerTakeScreenshotError, ThrowOnError>({

@@ -15,19 +15,19 @@
 Setup and start the Linux Ubuntu instance:
 
 ```bash
-npx @cuse/cli start
+npx @cusedev/cli start
 ```
 
 Install the Cuse package:
 
 ```bash
-npm install @cuse/core
+npm install @cusedev/core
 ```
 
 Create a `Computer` instance
 
 ```typescript
-import { Computer } from "@cuse/core";
+import { Computer } from '@cusedev/core';
 
 const computer = new Computer();
 ```
@@ -38,12 +38,12 @@ Use the `computer.tools` in your AI SDK tool parameter
 const tools = computer.tools;
 
 const stream = streamText({
-	model: anthropic("claude-3-5-sonnet-latest"),
-	messages,
-	tools: {
-		...computer.tools,
-	},
-	maxSteps: 30,
+  model: anthropic('claude-3-5-sonnet-latest'),
+  messages,
+  tools: {
+    ...computer.tools,
+  },
+  maxSteps: 30,
 });
 ```
 

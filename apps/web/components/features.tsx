@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Box, Code, Computer, Laptop, MessageCircle, Text } from "lucide-react";
-import { Button } from "./ui/button";
+import { Box, Code, Computer, Laptop, MessageCircle, Text } from 'lucide-react';
+import { Button } from './ui/button';
 
 const Features = () => {
   return (
@@ -12,8 +12,8 @@ const Features = () => {
             <Code className="size-6" />
             <h4 className="text-xl font-semibold">Command line interface</h4>
             <p className="text-base font-normal text-muted-foreground">
-              Use the Cuse CLI to manage the computers your AI agents use.
-              Stay on top of the machines you use and the tasks you perform.
+              Use the Cuse CLI to manage the computers your AI agents use. Stay
+              on top of the machines you use and the tasks you perform.
             </p>
           </div>
           <img
@@ -34,8 +34,8 @@ const Features = () => {
             <Text className="size-6" />
             <h4 className="text-xl font-semibold">Open source</h4>
             <p className="text-base font-normal text-muted-foreground">
-              Cuse is open source and easy to use locally for everyone.
-              Check out our repository on GitHub for an example of how to use Cuse.
+              Cuse is open source and easy to use locally for everyone. Check
+              out our repository on GitHub for an example of how to use Cuse.
             </p>
           </div>
         </div>
@@ -45,8 +45,9 @@ const Features = () => {
           <Box className="size-6" />
           <h4 className="text-xl font-semibold">SDK</h4>
           <p className="text-base font-normal text-muted-foreground">
-            Use the Cuse SDK to implement computer use in your own applications quickly.
-            Interact with the computer via our JS request client SDK or any other language via the REST API.
+            Use the Cuse SDK to implement computer use in your own applications
+            quickly. Interact with the computer via our JS request client SDK or
+            any other language via the REST API.
           </p>
         </div>
         <div className="w-full pl-12 md:pt-12">

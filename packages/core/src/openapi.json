@@ -1,781 +1,700 @@
 {
-    "openapi": "3.1.0",
-    "info": {
-      "title": "Computer Interaction API",
-      "version": "1.0.0",
-      "description": "API to interact with and control a computer.",
-      "contact": {
-        "name": "API Support",
-        "email": "support@example.com"
-      },
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Computer Interaction API",
+    "version": "1.0.0",
+    "description": "API to interact with and control a computer.",
+    "contact": {
+      "name": "API Support",
+      "email": "support@example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Editor",
+      "description": "File editing operations"
+    },
+    {
+      "name": "Computer",
+      "description": "System-level operations (keyboard, mouse, display)"
+    },
+    {
+      "name": "Bash",
+      "description": "Bash command operations"
+    }
+  ],
+  "paths": {
+    "/editor/view": {
+      "post": {
+        "tags": [
+          "Editor"
+        ],
+        "summary": "View a file",
+        "description": "View the contents of a file, optionally specifying a line range.",
+        "operationId": "editorViewFile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "Path to the file to be viewed."
+                  },
+                  "view_range": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "description": "Start and end lines (inclusive)."
+                  }
+                },
+                "required": [
+                  "path"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "servers": [
-      {
-        "url": "http://localhost:8080",
-        "description": "Local development server"
-      }
-    ],
-    "tags": [
-      {
-        "name": "Editor",
-        "description": "File editing operations"
-      },
-      {
-        "name": "Computer",
-        "description": "System-level operations (keyboard, mouse, display)"
-      },
-      {
-        "name": "Bash",
-        "description": "Bash command operations"
-      }
-    ],
-    "paths": {
-      "/editor/view": {
-        "post": {
-          "tags": [
-            "Editor"
-          ],
-          "summary": "View a file",
-          "description": "View the contents of a file, optionally specifying a line range.",
-          "operationId": "editorViewFile",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "Path to the file to be viewed."
-                    },
-                    "view_range": {
-                      "type": "array",
-                      "items": {
-                        "type": "integer"
-                      },
-                      "minItems": 2,
-                      "maxItems": 2,
-                      "description": "Start and end lines (inclusive)."
-                    }
-                  },
-                  "required": [
-                    "path"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "File content",
-              "content": {
-                "text/plain": {
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "File not found"
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/editor/create": {
-        "post": {
-          "tags": [
-            "Editor"
-          ],
-          "summary": "Create a file",
-          "description": "Create a new file with optional content.",
-          "operationId": "editorCreateFile",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "Path to the file to be created."
-                    },
-                    "file_text": {
-                      "type": "string",
-                      "description": "Optional content to place in the file."
-                    }
-                  },
-                  "required": [
-                    "path"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "File created"
-            },
-            "400": {
-              "description": "File already exists"
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/editor/str-replace": {
-        "post": {
-          "tags": [
-            "Editor"
-          ],
-          "summary": "Replace string in a file",
-          "description": "Replace occurrences of a string in a file with another string.",
-          "operationId": "editorReplaceString",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "Path to the file."
-                    },
-                    "old_str": {
-                      "type": "string",
-                      "description": "String to replace."
-                    },
-                    "new_str": {
-                      "type": "string",
-                      "description": "Replacement string."
-                    }
-                  },
-                  "required": [
-                    "path",
-                    "old_str",
-                    "new_str"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "String replaced"
-            },
-            "404": {
-              "description": "File not found"
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/editor/insert": {
-        "post": {
-          "tags": [
-            "Editor"
-          ],
-          "summary": "Insert text into a file",
-          "description": "Insert text into a specific line of a file.",
-          "operationId": "editorInsertText",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "Path to the file."
-                    },
-                    "text": {
-                      "type": "string",
-                      "description": "The text to insert."
-                    },
-                    "insert_line": {
-                      "type": "integer",
-                      "description": "Line number at which to insert text."
-                    }
-                  },
-                  "required": [
-                    "path",
-                    "text"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Text inserted"
-            },
-            "404": {
-              "description": "File not found"
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/editor/undo-edit": {
-        "post": {
-          "tags": [
-            "Editor"
-          ],
-          "summary": "Undo the last edit",
-          "description": "Currently not implemented.",
-          "operationId": "editorUndoLastEdit",
-          "responses": {
-            "500": {
-              "description": "Not implemented",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/computer/screenshot": {
-        "get": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Take a screenshot",
-          "description": "Captures a screenshot of the specified display and returns it as a base64-encoded string.",
-          "operationId": "computerTakeScreenshot",
-          "parameters": [
-            {
-              "name": "display_num",
-              "in": "query",
-              "description": "Display number to capture the screenshot from.",
-              "required": false,
+    "/editor/create": {
+      "post": {
+        "tags": [
+          "Editor"
+        ],
+        "summary": "Create a file",
+        "description": "Create a new file with optional content.",
+        "operationId": "editorCreateFile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
-                "type": "integer",
-                "default": 1
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "Path to the file to be created."
+                  },
+                  "file_text": {
+                    "type": "string",
+                    "description": "Optional content to place in the file."
+                  }
+                },
+                "required": [
+                  "path"
+                ]
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Base64-encoded screenshot image.",
-              "content": {
-                "text/plain": {
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "File created"
+          },
+          "400": {
+            "description": "File already exists"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
                 }
               }
             }
           }
         }
-      },
-      "/computer/key": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Press key",
-          "description": "Presses a key on the specified display.",
-          "operationId": "computerPressKey",
-          "requestBody": {
-            "required": true,
+      }
+    },
+    "/editor/str-replace": {
+      "post": {
+        "tags": [
+          "Editor"
+        ],
+        "summary": "Replace string in a file",
+        "description": "Replace occurrences of a string in a file with another string.",
+        "operationId": "editorReplaceString",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "Path to the file."
+                  },
+                  "old_str": {
+                    "type": "string",
+                    "description": "String to replace."
+                  },
+                  "new_str": {
+                    "type": "string",
+                    "description": "Replacement string."
+                  }
+                },
+                "required": [
+                  "path",
+                  "old_str",
+                  "new_str"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "String replaced"
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "key": {
-                      "type": "string",
-                      "description": "Key to press."
-                    },
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to press the key."
-                    }
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/editor/insert": {
+      "post": {
+        "tags": [
+          "Editor"
+        ],
+        "summary": "Insert text into a file",
+        "description": "Insert text into a specific line of a file.",
+        "operationId": "editorInsertText",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "Path to the file."
                   },
-                  "required": [
-                    "key"
-                  ]
+                  "text": {
+                    "type": "string",
+                    "description": "The text to insert."
+                  },
+                  "insert_line": {
+                    "type": "integer",
+                    "description": "Line number at which to insert text."
+                  }
+                },
+                "required": [
+                  "path",
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Text inserted"
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/editor/undo-edit": {
+      "post": {
+        "tags": [
+          "Editor"
+        ],
+        "summary": "Undo the last edit",
+        "description": "Currently not implemented.",
+        "operationId": "editorUndoLastEdit",
+        "responses": {
+          "500": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/screenshot": {
+      "get": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Take a Screenshot",
+        "description": "Captures and returns a screenshot from the specified display.",
+        "operationId": "computerTakeScreenshot",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DisplayNumber"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Screenshot captured successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "examples": {
+                  "ExampleScreenshotResponse": {
+                    "$ref": "#/components/examples/ExampleScreenshotResponse"
+                  }
                 }
               }
             }
           },
-          "responses": {
-            "204": {
-              "description": "Key pressed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-implementation-details": "The implementation should handle capturing the entire screen of the specified display. The screenshot data should be returned as a base64-encoded binary string. Ensure that the display number is valid and available."
+      }
+    },
+    "/computer/key": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Press key",
+        "description": "Presses a key on the specified display.",
+        "operationId": "computerPressKey",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "Key to press."
+                  },
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to press the key."
                   }
-                }
+                },
+                "required": [
+                  "key"
+                ]
               }
             }
           }
-        }
-      },
-      "/computer/type": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Type text",
-          "description": "Types text on the specified display.",
-          "operationId": "computerTypeText",
-          "requestBody": {
-            "required": true,
+        },
+        "responses": {
+          "204": {
+            "description": "Key pressed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "text": {
-                      "type": "string",
-                      "description": "Text to type."
-                    },
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to type text."
-                    },
-                    "typing_delay": {
-                      "type": "integer",
-                      "default": 12,
-                      "description": "Delay (in milliseconds) between typed characters."
-                    },
-                    "typing_group_size": {
-                      "type": "integer",
-                      "default": 50,
-                      "description": "Number of characters typed between delays."
-                    }
-                  },
-                  "required": [
-                    "text"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Text typed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
+                  "$ref": "#/components/schemas/HTTPError"
                 }
               }
             }
           }
         }
-      },
-      "/computer/mouse-move": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Move mouse cursor",
-          "description": "Moves the mouse cursor to the specified coordinates on the given display.",
-          "operationId": "computerMoveCursor",
-          "requestBody": {
-            "required": true,
+      }
+    },
+    "/computer/type": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Type text",
+        "description": "Types text on the specified display.",
+        "operationId": "computerTypeText",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "Text to type."
+                  },
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to type text."
+                  },
+                  "typing_delay": {
+                    "type": "integer",
+                    "default": 12,
+                    "description": "Delay (in milliseconds) between typed characters."
+                  },
+                  "typing_group_size": {
+                    "type": "integer",
+                    "default": 50,
+                    "description": "Number of characters typed between delays."
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Text typed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/mouse-move": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Move mouse cursor",
+        "description": "Moves the mouse cursor to the specified coordinates on the given display.",
+        "operationId": "computerMoveCursor",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "description": "X coordinate."
+                  },
+                  "y": {
+                    "type": "integer",
+                    "description": "Y coordinate."
+                  },
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to move the mouse."
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Mouse moved successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/left-click": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Perform left mouse click",
+        "description": "Performs a left mouse click on the specified display.",
+        "operationId": "computerLeftClick",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to perform the click."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Left click performed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/right-click": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Perform right mouse click",
+        "description": "Performs a right mouse click on the specified display.",
+        "operationId": "computerRightClick",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to perform the click."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Right click performed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/middle-click": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Perform middle mouse click",
+        "description": "Performs a middle mouse click on the specified display.",
+        "operationId": "computerMiddleClick",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to perform the click."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Middle click performed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/double-click": {
+      "post": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Perform double click",
+        "description": "Performs a double click with the left mouse button on the specified display.",
+        "operationId": "computerDoubleClick",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to perform the double click."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Double click performed successfully."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/computer/cursor-position": {
+      "get": {
+        "tags": [
+          "Computer"
+        ],
+        "summary": "Get cursor position",
+        "description": "Gets the current position of the mouse cursor on the specified display.",
+        "operationId": "computerGetCursorPosition",
+        "parameters": [
+          {
+            "name": "display_num",
+            "in": "query",
+            "description": "Display number to get the cursor position from.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cursor position coordinates.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "x": {
-                      "type": "integer",
-                      "description": "X coordinate."
+                      "type": "integer"
                     },
                     "y": {
-                      "type": "integer",
-                      "description": "Y coordinate."
-                    },
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to move the mouse."
+                      "type": "integer"
                     }
-                  },
-                  "required": [
-                    "x",
-                    "y"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Mouse moved successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
                   }
                 }
               }
             }
-          }
-        }
-      },
-      "/computer/left-click": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Perform left mouse click",
-          "description": "Performs a left mouse click on the specified display.",
-          "operationId": "computerLeftClick",
-          "requestBody": {
-            "required": false,
+          },
+          "500": {
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to perform the click."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Left click performed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/computer/right-click": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Perform right mouse click",
-          "description": "Performs a right mouse click on the specified display.",
-          "operationId": "computerRightClick",
-          "requestBody": {
-            "required": false,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to perform the click."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Right click performed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/computer/middle-click": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Perform middle mouse click",
-          "description": "Performs a middle mouse click on the specified display.",
-          "operationId": "computerMiddleClick",
-          "requestBody": {
-            "required": false,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to perform the click."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Middle click performed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/computer/double-click": {
-        "post": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Perform double click",
-          "description": "Performs a double click with the left mouse button on the specified display.",
-          "operationId": "computerDoubleClick",
-          "requestBody": {
-            "required": false,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "display_num": {
-                      "type": "integer",
-                      "default": 1,
-                      "description": "Display number on which to perform the double click."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "204": {
-              "description": "Double click performed successfully."
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/computer/cursor-position": {
-        "get": {
-          "tags": [
-            "Computer"
-          ],
-          "summary": "Get cursor position",
-          "description": "Gets the current position of the mouse cursor on the specified display.",
-          "operationId": "computerGetCursorPosition",
-          "parameters": [
-            {
-              "name": "display_num",
-              "in": "query",
-              "description": "Display number to get the cursor position from.",
-              "required": false,
-              "schema": {
-                "type": "integer",
-                "default": 1
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Cursor position coordinates.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "x": {
-                        "type": "integer"
-                      },
-                      "y": {
-                        "type": "integer"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/bash/command": {
-        "post": {
-          "tags": [
-            "Bash"
-          ],
-          "summary": "Execute Bash Command",
-          "description": "Executes a given bash command and returns the output.",
-          "operationId": "bashExecuteCommand",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "command": {
-                      "type": "string",
-                      "description": "Bash command to execute."
-                    }
-                  },
-                  "required": [
-                    "command"
-                  ]
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Command executed successfully.",
-              "content": {
-                "text/plain": {
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal Server Error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/bash/restart": {
-        "post": {
-          "tags": [
-            "Bash"
-          ],
-          "summary": "Restart System",
-          "description": "Restarts the system. Currently, this endpoint is not implemented.",
-          "operationId": "bashRestartSystem",
-          "responses": {
-            "500": {
-              "description": "Not implemented",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/HTTPError"
-                  }
+                  "$ref": "#/components/schemas/HTTPError"
                 }
               }
             }
@@ -783,16 +702,143 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "HTTPError": {
-          "type": "object",
-          "properties": {
-            "detail": {
-              "type": "string"
+    "/bash/command": {
+      "post": {
+        "tags": [
+          "Bash"
+        ],
+        "summary": "Execute Bash Command",
+        "description": "Executes a given bash command and returns the output.",
+        "operationId": "bashExecuteCommand",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "command": {
+                    "type": "string",
+                    "description": "Bash command to execute."
+                  }
+                },
+                "required": [
+                  "command"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Command executed successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bash/restart": {
+      "post": {
+        "tags": [
+          "Bash"
+        ],
+        "summary": "Restart System",
+        "description": "Restarts the system. Currently, this endpoint is not implemented.",
+        "operationId": "bashRestartSystem",
+        "responses": {
+          "500": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
             }
           }
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "HTTPError": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "InternalServerError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HTTPError"
+            }
+          }
+        }
+      },
+      "FileNotFound": {
+        "description": "File not found"
+      }
+    },
+    "parameters": {
+      "DisplayNumber": {
+        "name": "display_num",
+        "in": "query",
+        "description": "Display number to operate on, defaults to 1.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 1
+        }
+      }
+    },
+    "examples": {
+      "ExampleFileViewRequest": {
+        "summary": "Example request for viewing a file",
+        "description": "Example of how to view a file with a line range specified.",
+        "value": {
+          "path": "/path/to/file.txt",
+          "view_range": [
+            1,
+            10
+          ]
+        }
+      },
+      "ExampleKeyPressRequest": {
+        "summary": "Example request to press a key",
+        "description": "Example of how to press the 'Enter' key on display 1.",
+        "value": {
+          "key": "Enter",
+          "display_num": 1
+        }
+      },
+      "ExampleScreenshotResponse": {
+        "summary": "Example screenshot response",
+        "description": "Example of a base64-encoded image returned from a screenshot request.",
+        "value": "iVBORw0KGgoAAAANSUhEUgAA...5CYII="
+      }
+    }
   }
+}

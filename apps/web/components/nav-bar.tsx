@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Book, MenuIcon } from "lucide-react";
+import { Book, MenuIcon } from 'lucide-react';
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,16 +17,16 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+} from '@/components/ui/navigation-menu';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { ThemeToggle } from "./theme-toggle";
-import { FaGithub } from "react-icons/fa";
+} from '@/components/ui/sheet';
+import { ThemeToggle } from './theme-toggle';
+import { FaGithub } from 'react-icons/fa';
 
 const Navbar = () => {
   return (
