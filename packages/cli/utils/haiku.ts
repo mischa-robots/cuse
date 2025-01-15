@@ -134,7 +134,7 @@ export function haiku() {
 
   return (
     adjs[Math.floor(Math.random() * (adjs.length - 1))] +
-    '_' +
+    '-' +
     nouns[Math.floor(Math.random() * (nouns.length - 1))]
   );
 }
