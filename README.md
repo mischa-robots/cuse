@@ -1,4 +1,4 @@
-# 🚀 Cuse
+# Cuse
 
 **AI Computer Use Abstraction Layer** — toolkit for implementing computer usage capabilities for AI agents 🤖
 
