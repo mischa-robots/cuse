@@ -1,16 +1,16 @@
-# 🚀 Cuse
+# Cuse
 
 **AI Computer Use Abstraction Layer** — toolkit for implementing computer usage capabilities for AI agents 🤖
 
-## ✨ Features
+## Features
 
-- 💻 Computer Interaction: screenshots, typing, mouse actions
-- 📝 Text Editor Operations: view, create, edit files
-- 🔧 Command Execution: terminal commands, restart
-- 🔌 Extensible Framework: customizable functionalities
+- Computer Interaction: screenshots, typing, mouse actions
+- Text Editor Operations: view, create, edit files
+- Command Execution: terminal commands, restart
+- Extensible Framework: customizable functionalities
 - Currently supports **Linux Ubuntu** via local Docker image 🚀
 
-## 🚀 Quickstart
+## Quickstart
 
 Setup and start the Linux Ubuntu instance:
 
@@ -47,7 +47,7 @@ const stream = streamText({
 });
 ```
 
-## ⚡ Usage
+## Usage
 
 - **Linux Implementation Available**: Use the `Computer` class to interact with the Linux Ubuntu instance.
 - Methods for:
@@ -55,31 +55,31 @@ const stream = streamText({
   - **Terminal Commands**: `command()`, `restart()`
   - **Text Editor**: `view()`, `create()`, `strReplace()`, `insert()`, `undoEdit()`
 
-## 🛣️ Roadmap
+## Roadmap
 
-- 🌐 macOS, Windows, Cloud VM support
-- 🔑 Authentication Injection
-- ☁️ Hosted Service
-- 🧠 Stateful Machines
-- 📹 React Components for VM video streaming
+- macOS, Windows, Cloud VM support
+- Authentication Injection
+- Hosted Service
+- Stateful Machines
+- React Components for VM video streaming
 
-## 🤝 Contributing
+## Contributing
 
 - Suggestions, bug reports, feature requests: open issue or pull request
 
-## 📜 License
+## License
 
 - MIT License — see [LICENSE](LICENSE) file
 
-## 💬 Get in Touch
+## Get in Touch
 
 - Join community discussions, feature requests, or just say hello 👋
 
-## 📚 References
+## References
 
 - Created by [Cuse](https://cuse.dev/)
 - Caution Notice by [Anthropic](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/README.md)
 
-## 🌟 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=cuse-dev/cuse&type=Date&theme=dark)](https://star-history.com/#cuse-dev/cuse&Date)
