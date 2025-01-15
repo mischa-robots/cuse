@@ -11,8 +11,8 @@ const Benefits = () => {
           </h2>
         </div>
         <div className="mt-14 grid gap-6 md:grid-cols-1 lg:mt-20 lg:grid-cols-3">
-          <div className="relative flex gap-3 rounded-lg border-dashed md:block md:border-l md:p-5">
-            <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-accent md:size-12">
+          <div className="relative flex gap-3 border-dashed md:block md:border-l md:p-5">
+            <span className="mb-8 flex size-10 shrink-0 items-center justify-center bg-accent md:size-12">
               <Timer className="size-5 md:size-6" />
             </span>
             <div>
@@ -26,8 +26,8 @@ const Benefits = () => {
               </p>
             </div>
           </div>
-          <div className="relative flex gap-3 rounded-lg border-dashed md:block md:border-l md:p-5">
-            <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-accent md:size-12">
+          <div className="relative flex gap-3 border-dashed md:block md:border-l md:p-5">
+            <span className="mb-8 flex size-10 shrink-0 items-center justify-center bg-accent md:size-12">
               <Zap className="size-5 md:size-6" />
             </span>
             <div>
@@ -41,8 +41,8 @@ const Benefits = () => {
               </p>
             </div>
           </div>
-          <div className="relative flex gap-3 rounded-lg border-dashed md:block md:border-l md:p-5">
-            <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-accent md:size-12">
+          <div className="relative flex gap-3 border-dashed md:block md:border-l md:p-5">
+            <span className="mb-8 flex size-10 shrink-0 items-center justify-center bg-accent md:size-12">
               <Shield className="size-5 md:size-6" />
             </span>
             <div>

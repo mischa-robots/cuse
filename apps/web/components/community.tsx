@@ -5,7 +5,7 @@ const Community = () => {
   return (
     <section className="py-32 px-8">
       <div className="w-full">
-        <div className='flex items-center justify-center rounded-2xl border bg-[url("https://shadcnblocks.com/images/block/circles.svg")] bg-cover bg-center px-8 py-20 text-center md:p-20'>
+        <div className="flex items-center justify-center border bg-[url('https://shadcnblocks.com/images/block/circles.svg')] bg-cover bg-center px-8 py-20 text-center md:p-20">
           <div className="mx-auto max-w-screen-md">
             <h1 className="mb-4 text-balance text-2xl font-semibold md:text-5xl">
               Join the community
