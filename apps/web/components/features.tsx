@@ -1,7 +1,6 @@
 'use client';
 
-import { Box, Code, Computer, Laptop, MessageCircle, Text } from 'lucide-react';
-import { Button } from './ui/button';
+import { Box, Code, Text } from 'lucide-react';
 
 const Features = () => {
   return (

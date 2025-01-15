@@ -1,4 +1,4 @@
-import { PersonStanding, Shield, Timer, Zap, ZoomIn } from 'lucide-react';
+import { Shield, Timer, Zap } from 'lucide-react';
 
 const Benefits = () => {
   return (

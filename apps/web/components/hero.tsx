@@ -19,7 +19,7 @@ const Hero = () => {
             className="mx-auto mb-3 inline-flex items-center gap-3 border px-2 py-1 text-sm"
           >
             <Badge>NEW</Badge>
-            Get started in 30 seconds
+            Get started in 1 minute
             <span className="flex size-7 items-center justify-center bg-muted">
               <ArrowRight className="w-4" />
             </span>
