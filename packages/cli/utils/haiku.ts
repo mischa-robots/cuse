@@ -130,6 +130,7 @@ export function haiku() {
       'frog',
       'smoke',
       'star',
+      'machine',
     ];
 
   return (
