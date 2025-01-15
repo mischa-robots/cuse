@@ -3,7 +3,6 @@ import {
   FaGithub,
 } from 'react-icons/fa';
 
-
 const sections = [
   {
     title: 'Cuse',
