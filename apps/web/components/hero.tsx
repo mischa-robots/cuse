@@ -19,11 +19,11 @@ const Hero = () => {
         <div className="text-center">
           <a
             href="#"
-            className="mx-auto mb-3 inline-flex items-center gap-3 rounded-full border px-2 py-1 text-sm"
+            className="mx-auto mb-3 inline-flex items-center gap-3 border px-2 py-1 text-sm"
           >
             <Badge>NEW</Badge>
             Get started in 30 seconds
-            <span className="flex size-7 items-center justify-center rounded-full bg-muted">
+            <span className="flex size-7 items-center justify-center bg-muted">
               <ArrowRight className="w-4" />
             </span>
           </a>
