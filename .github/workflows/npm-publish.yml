@@ -19,26 +19,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+          bun-version: latest
 
       - name: Install dependencies
         working-directory: packages/cli
-        run: npm ci
+        run: bun install
 
       - name: Build
         working-directory: packages/cli
-        run: npm run build
+        run: bun run build
 
       - name: Bump patch version
         working-directory: packages/cli
-        run: npm version patch
+        run: bun x npm version patch
 
       - name: Publish to NPM
         working-directory: packages/cli
-        run: npm publish --access public
+        run: bunx npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
