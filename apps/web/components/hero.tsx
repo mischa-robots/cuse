@@ -3,12 +3,38 @@
 import {
   ArrowRight,
   Copy,
+  Check,
 } from 'lucide-react';
+import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+const packageManagers = {
+  npx: 'npx @cuse/cli init',
+  pnpm: 'pnpm create @cuse/cli init',
+  yarn: 'yarn create @cuse/cli init',
+  bun: 'bunx @cuse/cli init',
+} as const;
+
+type PackageManager = keyof typeof packageManagers;
 
 const Hero = () => {
+  const [selectedPM, setSelectedPM] = useState<PackageManager>('npx');
+  const [hasCopied, setHasCopied] = useState(false);
+
+  const handleSelect = (pm: PackageManager) => {
+    setSelectedPM(pm);
+    navigator.clipboard.writeText(packageManagers[pm]);
+    setHasCopied(true);
+  };
+
   return (
     <section className="py-32 px-8">
       <div className="w-full">
@@ -33,15 +59,26 @@ const Hero = () => {
             computers just like humans do.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button
-              size="lg"
-              onClick={() =>
-                navigator.clipboard.writeText('npx @cuse/cli init')
-              }
-            >
-              npx @cuse/cli init
-              <Copy />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="lg">
+                  <span className="flex items-center gap-2">
+                    {packageManagers[selectedPM]}
+                    {hasCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {Object.keys(packageManagers).map((pm) => (
+                  <DropdownMenuItem
+                    key={pm}
+                    onClick={() => handleSelect(pm as PackageManager)}
+                  >
+                    {pm}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button size="lg" variant="outline" asChild>
               <a href={process.env.NEXT_PUBLIC_GITHUB_URL + '/tree/main/examples/quickstart'} target="_blank">
                 See the example
