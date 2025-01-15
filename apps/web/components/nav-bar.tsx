@@ -1,21 +1,12 @@
 'use client';
 
 import { Book, MenuIcon } from 'lucide-react';
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import {
@@ -76,14 +67,14 @@ const Navbar = () => {
           <div className="hidden items-center gap-4 md:flex">
             <ThemeToggle />
             <Button variant="outline" asChild>
-              <a href="https://docs.cuse.dev" target="_blank">
+              <a href={process.env.NEXT_PUBLIC_DOCS_URL} target="_blank">
                 <Book />
                 Docs
               </a>
             </Button>
             <Button asChild>
-              <a href="https://github.com/cuse-dev/cuse" target="_blank">
-                <FaGithub className="mr-2" />
+              <a href={process.env.NEXT_PUBLIC_GITHUB_URL} target="_blank">
+                <FaGithub />
                 Github
               </a>
             </Button>
@@ -124,14 +115,14 @@ const Navbar = () => {
                 </div>
                 <div className="mt-6 flex flex-col gap-4">
                   <Button variant="outline" asChild>
-                    <a href="https://docs.cuse.dev" target="_blank">
+                    <a href={process.env.NEXT_PUBLIC_DOCS_URL} target="_blank">
                       <Book />
                       Documentation
                     </a>
                   </Button>
                   <Button asChild>
-                    <a href="https://github.com/cuse-dev/cuse" target="_blank">
-                      <FaGithub className="mr-2" />
+                    <a href={process.env.NEXT_PUBLIC_GITHUB_URL} target="_blank">
+                      <FaGithub />
                       Github
                     </a>
                   </Button>

@@ -2,11 +2,7 @@
 
 import {
   ArrowRight,
-  Blocks,
   Copy,
-  MessagesSquare,
-  MoveRight,
-  Users,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +14,8 @@ const Hero = () => {
       <div className="w-full">
         <div className="text-center">
           <a
-            href="#"
+            href={process.env.NEXT_PUBLIC_DOCS_URL + '/quickstart'}
+            target="_blank"
             className="mx-auto mb-3 inline-flex items-center gap-3 border px-2 py-1 text-sm"
           >
             <Badge>NEW</Badge>
@@ -43,11 +40,13 @@ const Hero = () => {
               }
             >
               npx @cuse/cli init
-              <Copy className="ml-2" strokeWidth={1} />
+              <Copy />
             </Button>
-            <Button size="lg" variant="outline">
-              See the example
-              <ArrowRight className="ml-2" />
+            <Button size="lg" variant="outline" asChild>
+              <a href={process.env.NEXT_PUBLIC_GITHUB_URL + '/tree/main/examples/quickstart'} target="_blank">
+                See the example
+                <ArrowRight />
+              </a>
             </Button>
           </div>
         </div>
