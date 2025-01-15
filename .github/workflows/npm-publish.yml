@@ -34,7 +34,7 @@ jobs:
 
       - name: Bump patch version
         working-directory: packages/cli
-        run: bun x npm version patch
+        run: bun x npm version patch --no-workspaces-update
 
       - name: Publish to NPM
         working-directory: packages/cli
