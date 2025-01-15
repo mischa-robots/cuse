@@ -3,7 +3,7 @@ import { FaDiscord } from 'react-icons/fa';
 
 const Community = () => {
   return (
-    <section className="py-32 px-8">
+    <section id="community" className="py-32 px-8">
       <div className="w-full">
         <div className="flex items-center justify-center border bg-[url('https://shadcnblocks.com/images/block/circles.svg')] bg-cover bg-center px-8 py-20 text-center md:p-20">
           <div className="mx-auto max-w-screen-md">
@@ -17,7 +17,7 @@ const Community = () => {
             </p>
             <div className="mt-11 flex flex-col justify-center gap-2 sm:flex-row">
               <Button size="lg" asChild>
-                <a href="https://discord.gg/cuse" target="_blank">
+                <a href={process.env.NEXT_PUBLIC_DISCORD_URL} target="_blank">
                   <FaDiscord />
                   Join Discord
                 </a>

@@ -1,15 +1,8 @@
 import {
   FaDiscord,
-  FaFacebook,
   FaGithub,
-  FaInstagram,
-  FaLinkedin,
-  FaTwitter,
 } from 'react-icons/fa';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 const sections = [
   {
@@ -17,6 +10,7 @@ const sections = [
     links: [
       { name: 'Features', href: '#features' },
       { name: 'Benefits', href: '#benefits' },
+      { name: 'Community', href: '#community' },
       { name: 'Roadmap', href: '#roadmap' },
     ],
   },
@@ -48,12 +42,12 @@ const Footer = () => {
               </div>
               <ul className="flex items-center space-x-6">
                 <li className="font-medium duration-200 hover:scale-110 hover:text-muted-foreground">
-                  <a href="https://github.com/cuse-ai/cuse" target="_blank">
+                  <a href={process.env.NEXT_PUBLIC_GITHUB_URL} target="_blank">
                     <FaGithub className="size-6" />
                   </a>
                 </li>
                 <li className="font-medium duration-200 hover:scale-110 hover:text-muted-foreground">
-                  <a href="https://discord.gg/cuse" target="_blank">
+                  <a href={process.env.NEXT_PUBLIC_DISCORD_URL} target="_blank">
                     <FaDiscord className="size-6" />
                   </a>
                 </li>
