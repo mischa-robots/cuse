@@ -1,84 +1,80 @@
 # Cuse
 
-**AI Computer Use Abstraction Layer** — toolkit for implementing computer usage capabilities for AI agents 🤖
+An open-source framework for building AI agents that can interact with computers
 
 ## Features
 
-- Computer Interaction: screenshots, typing, mouse actions
-- Text Editor Operations: view, create, edit files
-- Command Execution: terminal commands, restart
-- Extensible Framework: customizable functionalities
-- Currently supports **Linux Ubuntu** via local Docker image 🚀
+- **Computer Control**: Display, mouse, and keyboard interaction
+- **File Operations**: View, create, and edit files
+- **Shell Access**: Execute commands and manage processes
+- **App Framework**: Build custom applications
+- **Linux Support**: Run via Docker containers
 
 ## Quickstart
 
-Setup and start the Linux Ubuntu instance:
+Install dependencies:
 
 ```bash
-npx @cusedev/cli start
+npm install @cuse/core
 ```
 
-Install the Cuse package:
+Initialize and create a computer:
 
 ```bash
-npm install @cusedev/core
+npx @cuse/cli init
+npx @cuse/cli new
+npx @cuse/cli start
 ```
 
 Create a `Computer` instance
 
 ```typescript
-import { Computer } from '@cusedev/core';
+import { Computer } from '@cuse/core';
 
 const computer = new Computer();
 ```
 
-Use the `computer.tools` in your AI SDK tool parameter
+Interact with the computer:
 
 ```typescript
-const tools = computer.tools;
+// Take a screenshot
+const screenshot = await computer.system.display.getScreenshot();
 
-const stream = streamText({
-  model: anthropic('claude-3-5-sonnet-latest'),
-  messages,
-  tools: {
-    ...computer.tools,
-  },
-  maxSteps: 30,
-});
+// Type some text
+await computer.system.keyboard.type({ text: 'Hello, World!' });
+
+// Execute a command
+const output = await computer.system.bash.execute({ command: 'ls -la' });
 ```
 
-## Usage
+## Documentation
 
-- **Linux Implementation Available**: Use the `Computer` class to interact with the Linux Ubuntu instance.
-- Methods for:
-  - **Computer Interaction**: `screenshot()`, `key()`, `type()`, `mouseMove()`, `click()`, etc.
-  - **Terminal Commands**: `command()`, `restart()`
-  - **Text Editor**: `view()`, `create()`, `strReplace()`, `insert()`, `undoEdit()`
+Visit our [documentation](https://docs.cuse.dev) to learn more about:
+- Getting started with the example project
+- Adding Cuse to your existing project
+- Core concepts and API reference
+- CLI commands and usage
 
 ## Roadmap
 
-- macOS, Windows, Cloud VM support
-- Authentication Injection
-- Hosted Service
+- Support for other platforms
+- Authentication
+- Deployment
 - Stateful Machines
-- React Components for VM video streaming
+- Reusable Workflows
 
 ## Contributing
 
-- Suggestions, bug reports, feature requests: open issue or pull request
+Contributions are welcome! Please check out our [GitHub repository](https://github.com/cuse-dev/cuse).
 
 ## License
 
-- MIT License — see [LICENSE](LICENSE) file
+MIT License — see [LICENSE](LICENSE) file
 
 ## Get in Touch
 
-- Join community discussions, feature requests, or just say hello 👋
-
-## References
-
-- Created by [Cuse](https://cuse.dev/)
-- Caution Notice by [Anthropic](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/README.md)
+- Visit our [website](https://cuse.dev)
+- Join our [Discord community](https://discord.gg/56svtW9M)
 
 ## Star History
 
