@@ -45,7 +45,6 @@ export async function POST(req: Request) {
         height: 768,
       },
     },
-    apps: {},
   });
 
   const result = streamText({
