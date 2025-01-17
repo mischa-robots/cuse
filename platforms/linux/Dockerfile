@@ -32,6 +32,7 @@ RUN apt-get update && \
     libsqlite3-dev \
     curl \
     git \
+    python3-psutil \
     libncursesw5-dev \
     xz-utils \
     tk-dev \
