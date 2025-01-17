@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4242/{computer_name}",
+      "url": "http://localhost:4242/{computer_name}/api",
       "description": "Local development server",
       "variables": {
         "computer_name": {
@@ -42,9 +42,7 @@
   "paths": {
     "/computer/screenshot": {
       "get": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Take a Screenshot",
         "description": "Captures and returns a screenshot from the specified display as a PNG file.",
         "operationId": "computerTakeScreenshot",
@@ -74,9 +72,7 @@
     },
     "/computer/key": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Press key",
         "description": "Presses a key on the specified display.",
         "operationId": "computerPressKey",
@@ -97,9 +93,7 @@
                     "description": "Display number on which to press the key."
                   }
                 },
-                "required": [
-                  "key"
-                ]
+                "required": ["key"]
               }
             }
           }
@@ -123,9 +117,7 @@
     },
     "/computer/type": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Type text",
         "description": "Types text on the specified display.",
         "operationId": "computerTypeText",
@@ -156,9 +148,7 @@
                     "description": "Number of characters typed between delays."
                   }
                 },
-                "required": [
-                  "text"
-                ]
+                "required": ["text"]
               }
             }
           }
@@ -182,9 +172,7 @@
     },
     "/computer/mouse-move": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Move mouse cursor",
         "description": "Moves the mouse cursor to the specified coordinates on the given display.",
         "operationId": "computerMoveCursor",
@@ -209,10 +197,7 @@
                     "description": "Display number on which to move the mouse."
                   }
                 },
-                "required": [
-                  "x",
-                  "y"
-                ]
+                "required": ["x", "y"]
               }
             }
           }
@@ -236,9 +221,7 @@
     },
     "/computer/left-click": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Perform left mouse click",
         "description": "Performs a left mouse click on the specified display.",
         "operationId": "computerLeftClick",
@@ -278,9 +261,7 @@
     },
     "/computer/right-click": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Perform right mouse click",
         "description": "Performs a right mouse click on the specified display.",
         "operationId": "computerRightClick",
@@ -320,9 +301,7 @@
     },
     "/computer/middle-click": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Perform middle mouse click",
         "description": "Performs a middle mouse click on the specified display.",
         "operationId": "computerMiddleClick",
@@ -362,9 +341,7 @@
     },
     "/computer/double-click": {
       "post": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Perform double click",
         "description": "Performs a double click with the left mouse button on the specified display.",
         "operationId": "computerDoubleClick",
@@ -404,9 +381,7 @@
     },
     "/computer/cursor-position": {
       "get": {
-        "tags": [
-          "Computer"
-        ],
+        "tags": ["Computer"],
         "summary": "Get cursor position",
         "description": "Gets the current position of the mouse cursor on the specified display.",
         "operationId": "computerGetCursorPosition",
@@ -456,9 +431,7 @@
     },
     "/editor/view": {
       "post": {
-        "tags": [
-          "Editor"
-        ],
+        "tags": ["Editor"],
         "summary": "View a file",
         "description": "View the contents of a file, optionally specifying a line range.",
         "operationId": "editorViewFile",
@@ -483,9 +456,7 @@
                     "description": "Start and end lines (inclusive)."
                   }
                 },
-                "required": [
-                  "path"
-                ]
+                "required": ["path"]
               }
             }
           }
@@ -519,9 +490,7 @@
     },
     "/editor/create": {
       "post": {
-        "tags": [
-          "Editor"
-        ],
+        "tags": ["Editor"],
         "summary": "Create a file",
         "description": "Create a new file with optional content.",
         "operationId": "editorCreateFile",
@@ -541,9 +510,7 @@
                     "description": "Optional content to place in the file."
                   }
                 },
-                "required": [
-                  "path"
-                ]
+                "required": ["path"]
               }
             }
           }
@@ -570,9 +537,7 @@
     },
     "/editor/str-replace": {
       "post": {
-        "tags": [
-          "Editor"
-        ],
+        "tags": ["Editor"],
         "summary": "Replace string in a file",
         "description": "Replace occurrences of a string in a file with another string.",
         "operationId": "editorReplaceString",
@@ -596,11 +561,7 @@
                     "description": "Replacement string."
                   }
                 },
-                "required": [
-                  "path",
-                  "old_str",
-                  "new_str"
-                ]
+                "required": ["path", "old_str", "new_str"]
               }
             }
           }
@@ -627,9 +588,7 @@
     },
     "/editor/insert": {
       "post": {
-        "tags": [
-          "Editor"
-        ],
+        "tags": ["Editor"],
         "summary": "Insert text into a file",
         "description": "Insert text into a specific line of a file.",
         "operationId": "editorInsertText",
@@ -653,10 +612,7 @@
                     "description": "Line number at which to insert text."
                   }
                 },
-                "required": [
-                  "path",
-                  "text"
-                ]
+                "required": ["path", "text"]
               }
             }
           }
@@ -683,9 +639,7 @@
     },
     "/editor/undo-edit": {
       "post": {
-        "tags": [
-          "Editor"
-        ],
+        "tags": ["Editor"],
         "summary": "Undo the last edit",
         "description": "Currently not implemented.",
         "operationId": "editorUndoLastEdit",
@@ -705,9 +659,7 @@
     },
     "/bash/command": {
       "post": {
-        "tags": [
-          "Bash"
-        ],
+        "tags": ["Bash"],
         "summary": "Execute Bash Command",
         "description": "Executes a given bash command and returns the output.",
         "operationId": "bashExecuteCommand",
@@ -723,9 +675,7 @@
                     "description": "Bash command to execute."
                   }
                 },
-                "required": [
-                  "command"
-                ]
+                "required": ["command"]
               }
             }
           }
@@ -756,9 +706,7 @@
     },
     "/bash/restart": {
       "post": {
-        "tags": [
-          "Bash"
-        ],
+        "tags": ["Bash"],
         "summary": "Restart System",
         "description": "Restarts the system. Currently, this endpoint is not implemented.",
         "operationId": "bashRestartSystem",
@@ -821,10 +769,7 @@
         "description": "Example of how to view a file with a line range specified.",
         "value": {
           "path": "/path/to/file.txt",
-          "view_range": [
-            1,
-            10
-          ]
+          "view_range": [1, 10]
         }
       },
       "ExampleKeyPressRequest": {

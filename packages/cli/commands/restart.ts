@@ -63,7 +63,7 @@ export const restartCommand: CommandModule<RestartOptions> = {
         return;
       }
 
-      console.info(`Restarting all computers (${computers.length} found)...`);
+      console.info(`Restarting computers (${computers.length} found)...`);
       const restartedComputers = [];
 
       for (const computer of computers) {

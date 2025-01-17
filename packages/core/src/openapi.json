@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4242/{computer_name}",
+      "url": "http://localhost:4242/{computer_name}/api",
       "description": "Local development server",
       "variables": {
         "computer_name": {
