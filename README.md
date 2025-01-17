@@ -22,8 +22,6 @@ Initialize and create a computer:
 
 ```bash
 npx @cusedev/cli init
-npx @cusedev/cli new
-npx @cusedev/cli start
 ```
 
 Create a `Computer` instance
@@ -50,6 +48,7 @@ const output = await computer.system.bash.execute({ command: 'ls -la' });
 ## Documentation
 
 Visit our [documentation](https://docs.cuse.dev) to learn more about:
+
 - Getting started with the example project
 - Adding cuse to your existing project
 - Core concepts and API reference
