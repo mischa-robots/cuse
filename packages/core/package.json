@@ -7,7 +7,7 @@
     "agents",
     "computer-use"
   ],
-  "version": "0.0.13",
+  "version": "0.1.21",
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +29,10 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "rm -rf dist && bun build index.ts --outdir dist --target node --minify && tsc --emitDeclarationOnly",
