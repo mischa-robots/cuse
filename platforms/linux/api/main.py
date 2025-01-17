@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, APIRouter
 from fastapi.responses import RedirectResponse
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +10,17 @@ from routers import computer, bash, editor
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Create FastAPI app
 app = FastAPI()
+
+# Create API router with /api prefix
+api_router = APIRouter(prefix="/api")
+api_router.include_router(computer.router)
+api_router.include_router(bash.router)
+api_router.include_router(editor.router)
+
+# Include the API router
+app.include_router(api_router)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -26,10 +36,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.include_router(computer.router)
-app.include_router(bash.router)
-app.include_router(editor.router)
 
 def extract_root_path_from_referer(referer: str) -> str:
     # Extract the computer ID path from referer URL
@@ -72,6 +78,7 @@ async def dynamic_root_path_middleware(request: Request, call_next):
     response = await call_next(request)
     return response
 
+@app.get("")
 @app.get("/")
 async def root():
     return RedirectResponse(url="docs")

@@ -60,7 +60,9 @@ export const startCommand: CommandModule<StartOptions> = {
         console.info(`Container: ${computer.containerId}`);
         console.info(`API: ${computer.api || 'No API URL available'}`);
         console.info(`noVNC: ${computer.novnc || 'No noVNC URL available'}`);
-        console.info(`VNC: ${computer.api}/vnc || "No VNC URL available"`);
+        console.info(
+          `VNC: ${computer.api ? `${computer.api}/vnc` : 'No VNC URL available'}`
+        );
         printComputerTable([computer]);
         return;
       } catch (error: any) {
@@ -81,7 +83,7 @@ export const startCommand: CommandModule<StartOptions> = {
       return;
     }
 
-    console.info('Starting all computers...');
+    console.info('Starting computers...');
     const startedComputers = [];
 
     for (const computer of configComputers) {
@@ -96,7 +98,7 @@ export const startCommand: CommandModule<StartOptions> = {
           `noVNC: ${startedComputer.novnc || 'No noVNC URL available'}`
         );
         console.info(
-          `VNC: ${startedComputer.api}/vnc || "No VNC URL available"`
+          `VNC: ${startedComputer.api ? `${startedComputer.api}/vnc` : 'No VNC URL available'}`
         );
         startedComputers.push(startedComputer);
       } catch (error: any) {
