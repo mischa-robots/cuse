@@ -1,1 +1,1 @@
-export { KeychainApp } from './KeychainApp';
+export { Keychain } from './Keychain';

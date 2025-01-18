@@ -15,12 +15,8 @@ export abstract class App {
   }
 
   async _init(computer: Computer, ...args: any[]): Promise<void> {
-    this.register(computer);
-    await this.init(...args);
-  }
-
-  private register(computer: Computer): void {
     this.computer = computer;
+    await this.init(...args);
   }
 
   abstract init(...args: any[]): Promise<void>;

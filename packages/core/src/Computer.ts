@@ -45,11 +45,10 @@ export class Computer<T extends Record<string, App> = {}> {
   }
 
   async setup() {
-    await Promise.all(Object.values(this.apps).map((app) => app.init()));
     await Promise.all(Object.values(this.apps).map((app) => app.install()));
   }
 
-  public shutdown() {
-    Object.values(this.apps).forEach((app) => app.stop());
+  async shutdown() {
+    await Promise.all(Object.values(this.apps).map((app) => app.stop()));
   }
 }
