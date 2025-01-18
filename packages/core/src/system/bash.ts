@@ -26,6 +26,7 @@ export class Bash implements BashInterface {
    * @throws Error if command execution fails
    */
   async execute({ command }: ExecuteCommandParams): Promise<CommandResponse> {
+    console.log('Executing command:', command);
     const response = await handleResponse(
       client
         .bashExecuteCommand({
