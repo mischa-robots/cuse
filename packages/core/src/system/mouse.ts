@@ -5,6 +5,7 @@ import {
   SystemConfig,
   MoveParams,
   DragParams,
+  ScrollParams,
 } from './types';
 import { handleResponse } from './utils';
 
@@ -99,6 +100,19 @@ export class Mouse implements MouseInterface {
     await handleResponse(
       client.computerLeftClickDrag({
         body: { x, y, display_num: this.config.displayNum },
+      })
+    );
+  }
+
+  /**
+   * Perform a mouse wheel scroll operation
+   * @param params Scroll parameters containing number of clicks
+   * @throws Error if scroll operation fails
+   */
+  async scroll({ clicks }: ScrollParams): Promise<void> {
+    await handleResponse(
+      client.computerScroll({
+        body: { clicks, display_num: this.config.displayNum },
       })
     );
   }

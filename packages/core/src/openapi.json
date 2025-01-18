@@ -464,6 +464,44 @@
         }
       }
     },
+    "/computer/scroll": {
+      "post": {
+        "tags": ["Computer"],
+        "summary": "Scroll mouse wheel",
+        "description": "Performs a mouse wheel scroll operation on the specified display.",
+        "operationId": "computerScroll",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "clicks": {
+                    "type": "integer",
+                    "description": "Number of clicks to scroll. Positive values scroll up, negative values scroll down."
+                  },
+                  "display_num": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Display number on which to perform the scroll operation."
+                  }
+                },
+                "required": ["clicks"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Scroll performed successfully."
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/editor/view": {
       "post": {
         "tags": ["Editor"],

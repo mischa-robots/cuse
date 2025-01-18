@@ -44,6 +44,11 @@ export interface DragParams {
   y: number;
 }
 
+export interface ScrollParams {
+  /** Number of clicks to scroll */
+  clicks: number;
+}
+
 /**
  * Mouse control interface for controlling cursor movement and clicks
  */
@@ -62,6 +67,8 @@ export interface MouseInterface {
   doubleClick(): Promise<void>;
   /** Perform a left click and drag to target coordinates */
   leftClickDrag(params: DragParams): Promise<void>;
+  /** Perform a mouse wheel scroll operation */
+  scroll(params: ScrollParams): Promise<void>;
 }
 
 /**

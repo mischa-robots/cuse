@@ -1,6 +1,7 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import { Computer } from '../Computer';
-import { CoreTool } from 'ai';
+import { CoreTool, tool } from 'ai';
+import { z } from 'zod';
 
 export const initTools = (computer: Computer) => {
   return {
@@ -82,6 +83,8 @@ export const initTools = (computer: Computer) => {
             await new Promise((resolve) => setTimeout(resolve, 300));
             return 'Left clicked and dragged';
           default:
+            console.log('Invalid action', action);
+
             return 'Invalid action';
         }
       },
@@ -99,6 +102,8 @@ export const initTools = (computer: Computer) => {
     }),
     bash: anthropic.tools.bash_20241022({
       execute: async ({ command, restart }) => {
+        console.log('Executing command:', command);
+
         if (restart) {
           await computer.system.bash.restart();
         }
@@ -106,7 +111,10 @@ export const initTools = (computer: Computer) => {
           .execute({ command })
           .catch((error) => {
             console.error(error);
-            return 'Failed to execute command';
+            return (
+              'Failed to execute command: ' +
+              (error.message ? error.message.slice(0, 500) : 'Unknown error')
+            );
           });
       },
     }),
@@ -158,6 +166,17 @@ export const initTools = (computer: Computer) => {
           default:
             return 'Invalid command';
         }
+      },
+    }),
+    scroll: tool({
+      parameters: z.object({
+        clicks: z.number().describe('The number of clicks to scroll'),
+      }),
+      description: 'Scroll the mouse wheel',
+      execute: async ({ clicks }) => {
+        await computer.system.mouse.scroll({ clicks });
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return `Scrolled ${clicks} clicks`;
       },
     }),
   } as Record<string, CoreTool>;
