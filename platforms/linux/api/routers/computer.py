@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from typing import Dict
@@ -19,6 +20,10 @@ class KeyPressRequest(BaseModel):
 class MouseMoveRequest(BaseModel):
     x: int
     y: int
+    display_num: int = 1
+
+class ScrollRequest(BaseModel):
+    clicks: int
     display_num: int = 1
 
 class DisplayRequest(BaseModel):
@@ -109,5 +114,12 @@ async def cursor_position(display_num: int = 1) -> Dict[str, int]:
     try:
         x, y = pyautogui.position()
         return {"x": x, "y": y}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/scroll")
+async def scroll(body: ScrollRequest) -> Dict[str, int]:
+    try:
+        pyautogui.scroll(body.clicks)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
