@@ -1,6 +1,5 @@
 import * as client from './client';
 import { DisplayInterface, SystemConfig } from './types';
-import { handleResponse } from './utils';
 
 /**
  * Display control implementation
@@ -15,16 +14,14 @@ export class Display implements DisplayInterface {
    * @throws Error if screenshot capture fails or response is empty
    */
   async getScreenshot(): Promise<File | Blob> {
-    const response = await handleResponse(
-      client.computerTakeScreenshot({
-        query: { display_num: this.config.displayNum },
-      })
-    );
+    const response = await client.takeScreenshot({
+      query: { display_num: this.config.displayNum },
+    });
 
-    if (!response) {
+    if (!response.data) {
       throw new Error('Failed to capture screenshot');
     }
 
-    return response;
+    return response.data as unknown as File | Blob;
   }
 }

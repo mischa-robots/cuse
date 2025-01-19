@@ -73,7 +73,7 @@ async function getContainerInfo(
       os,
       containerId: id.slice(0, 12),
       hostname: cleanName,
-      api: `http://localhost:${PROXY_PORT}/${cleanName}`,
+      api: `http://localhost:${PROXY_PORT}/${cleanName}/api`,
       novnc: `http://localhost:${PROXY_PORT}/${cleanName}/novnc`,
     };
   } catch {
@@ -85,7 +85,7 @@ async function checkComputerAvailability(
   identifier: string,
   spinner: Ora,
   maxRetries = 60,
-  retryDelay = 1000
+  retryDelay = 2000
 ): Promise<boolean> {
   const url = `http://localhost:${PROXY_PORT}/${identifier}/docs`;
   let dots = '';
@@ -95,6 +95,12 @@ async function checkComputerAvailability(
       const { stdout } = await execa('curl', ['-s', '-I', url]);
       if (stdout.includes('HTTP/1.1 200') || stdout.includes('HTTP/1.1 308')) {
         return true;
+      }
+
+      // Check if the container is running
+      const isRunning = await containerIsRunning(identifier);
+      if (!isRunning) {
+        return false;
       }
     } catch (error) {
       // Ignore errors and continue retrying

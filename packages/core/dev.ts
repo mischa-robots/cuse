@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+// @ts-nocheck
 import * as core from './index';
 
 async function runCommand(command: string) {
@@ -18,7 +19,6 @@ async function runCommand(command: string) {
 
 async function main() {
   try {
-    console.log(Object.keys(core.toolsets));
     await runCommand('bun run build');
     await runCommand('bun run check-types');
     console.log('Build completed successfully!');

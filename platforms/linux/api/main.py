@@ -4,7 +4,15 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 import re
 import logging
-from routers import computer, bash, editor
+from routers import (
+    mouse_router,
+    keyboard_router,
+    display_router,
+    bash_router,
+    editor_router,
+    keychain_router,
+    filesystem_router
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -12,15 +20,6 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI app
 app = FastAPI()
-
-# Create API router with /api prefix
-api_router = APIRouter(prefix="/api")
-api_router.include_router(computer.router)
-api_router.include_router(bash.router)
-api_router.include_router(editor.router)
-
-# Include the API router
-app.include_router(api_router)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -38,47 +37,74 @@ app.add_middleware(
 )
 
 def extract_root_path_from_referer(referer: str) -> str:
-    # Extract the computer ID path from referer URL
-    match = re.match(r"^https?://[^/]+(/[^/]+)", referer or "")
+    """
+    Extracts "/<computer-name>" (etc.) from the referer URL if present.
+    Example referer: "http://localhost:4242/mycomputer/api/..."
+    This will yield "/mycomputer" as the root path.
+    """
+    match = re.match(r"^https?://[^/]+(/[^/]+)(?:/.*)?", referer)
     return match.group(1) if match else ""
 
 @app.middleware("http")
 async def dynamic_root_path_middleware(request: Request, call_next):
-    referer = request.headers.get("referer", "")
-    root_path = extract_root_path_from_referer(referer)
+    root_path = ""
     
-    # Update request scope with root_path
+    # Try to get the computer name from X-Forwarded-Prefix
+    forwarded_prefix = request.headers.get("x-forwarded-prefix", "")
+    if forwarded_prefix:
+        match = re.match(r"^/([^/]+)(?:/.*)?$", forwarded_prefix)
+        if match and match.group(1) not in ["docs", "api", "openapi.json", "redoc"]:
+            root_path = f"/{match.group(1)}"
+    
+    # If no root_path found, try the current path
+    if not root_path:
+        path = request.url.path
+        match = re.match(r"^/([^/]+)(?:/.*)?$", path)
+        if match and match.group(1) not in ["docs", "api", "openapi.json", "redoc"]:
+            root_path = f"/{match.group(1)}"
+    
+    # Fallback to referer if still no root_path
+    if not root_path:
+        referer = request.headers.get("referer", "")
+        print(f"referer: {referer}")
+        root_path = extract_root_path_from_referer(referer)
+    
     request.scope["root_path"] = root_path
-    
-    # If accessing openapi.json, update the servers list
-    if request.url.path.endswith("/openapi.json"):
-        app.openapi_schema = None  # Clear cached schema
-        openapi_schema = get_openapi(
-            title="Computer API",
-            version="1.0.0",
-            description="API for controlling a computer",
-            routes=app.routes,
-        )
-        if root_path:
-            # Get the host and port from the referer URL
-            referer_match = re.match(r"^https?://([^/]+)", referer)
-            if referer_match:
-                host_with_port = referer_match.group(1)
-            else:
-                # Fallback to request host
-                host_with_port = request.headers.get("host", request.url.netloc)
-            
-            # Get the scheme (http/https)
-            scheme = request.headers.get("x-forwarded-proto", request.url.scheme)
-            # Use the root path as server URL with the correct host and port
-            server_url = f"{scheme}://{host_with_port}{root_path}"
-            openapi_schema["servers"] = [{"url": server_url}]
-        app.openapi_schema = openapi_schema
-    
     response = await call_next(request)
+    
+    # If we're getting redirected and we have a root_path, 
+    # make sure the redirect includes the computer name
+    if response.status_code in (301, 302, 307) and root_path:
+        location = response.headers.get("location")
+        if location and location.startswith("/"):
+            # Don't add root_path if it's already there
+            if not location.startswith(root_path + "/"):
+                response.headers["location"] = f"{root_path}{location}"
+    
     return response
 
-@app.get("")
+
+# Create API router with /api prefix
+api_router = APIRouter(prefix="/api")
+api_router.include_router(mouse_router)
+api_router.include_router(keyboard_router)
+api_router.include_router(display_router)
+api_router.include_router(bash_router)
+api_router.include_router(editor_router)
+api_router.include_router(keychain_router)
+api_router.include_router(filesystem_router)
+
+# Include the API router
+app.include_router(api_router)
+
+# Redirect root to docs
 @app.get("/")
-async def root():
-    return RedirectResponse(url="docs")
+async def root(request: Request):
+    root_path = request.scope.get("root_path", "")
+    return RedirectResponse(url=f"{root_path}/docs")
+
+# Redirect /api to /docs
+@app.get("/api")
+async def api_root(request: Request):
+    root_path = request.scope.get("root_path", "")
+    return RedirectResponse(url=f"{root_path}/docs")

@@ -1,16 +1,13 @@
-import {
-  GetProcessOutputParams,
-  SystemConfig,
-  TerminateProcessParams,
-} from './types';
 import * as client from './client';
 import {
   BashInterface,
+  SystemConfig,
   ExecuteCommandParams,
-  CommandResponse,
+  GetProcessOutputParams,
+  TerminateProcessParams,
   ProcessInfo,
+  CommandResponse,
 } from './types';
-import { handleResponse } from './utils';
 
 /**
  * Bash control implementation
@@ -21,91 +18,63 @@ export class Bash implements BashInterface {
 
   /**
    * Execute a shell command
-   * @param params Parameters containing the command to execute
-   * @returns Promise with the command response (output or process ID)
+   * @param params Command execution parameters
+   * @returns Promise with command execution response
    * @throws Error if command execution fails
    */
   async execute({ command }: ExecuteCommandParams): Promise<CommandResponse> {
-    console.log('Executing command:', command);
-    const response = await handleResponse(
-      client
-        .bashExecuteCommand({
-          body: { command },
-        })
-        .catch((error) => {
-          console.error(error);
-          throw new Error(`Command execution failed: ${error.message}`);
-        })
-    );
+    const response = await client.executeCommand({
+      body: { command },
+    });
 
-    if (!response) {
-      throw new Error('Command execution failed');
+    if (!response.data) {
+      throw new Error('Failed to execute command');
     }
 
-    if (response.status === 'completed' && response.output) {
-      return {
-        ...response,
-        output: this.formatOutput(response.output),
-      };
-    }
-
-    return response;
+    // Ensure the status is one of our expected values
+    const status =
+      response.data.status === 'background' ? 'background' : 'completed';
+    return {
+      ...response.data,
+      status,
+    } as CommandResponse;
   }
 
   /**
    * Get output from a background process
-   * @param pid Process ID
-   * @returns Promise with the process output
-   * @throws Error if process not found or output retrieval fails
+   * @param params Process output parameters
+   * @returns Promise with process output response
+   * @throws Error if getting process output fails
    */
   async getProcessOutput({
     pid,
   }: GetProcessOutputParams): Promise<CommandResponse> {
-    const response = await handleResponse(
-      client
-        .bashGetProcessOutput({
-          path: {
-            pid,
-          },
-        })
-        .catch((error) => {
-          console.error(error);
-          throw new Error(`Failed to get process output: ${error.message}`);
-        })
-    );
+    const response = await client.getProcessOutput({
+      path: { pid },
+    });
 
-    if (!response) {
+    if (!response.data) {
       throw new Error('Failed to get process output');
     }
 
-    if (response.output) {
-      return {
-        ...response,
-        output: this.formatOutput(response.output),
-      };
-    }
-
-    return response;
+    // Ensure the status is one of our expected values
+    const status =
+      response.data.status === 'background' ? 'background' : 'completed';
+    return {
+      ...response.data,
+      status,
+    } as CommandResponse;
   }
 
   /**
    * Terminate a background process
-   * @param params Parameters containing the process ID
+   * @param params Process termination parameters
    * @throws Error if process termination fails
    */
   async terminateProcess({ pid }: TerminateProcessParams): Promise<void> {
-    await handleResponse(
-      client
-        .bashTerminateProcess({
-          path: {
-            pid,
-          },
-        })
-        .catch((error) => {
-          console.error(error);
-          throw new Error(`Failed to terminate process: ${error.message}`);
-        })
-    );
+    await client.terminateProcess({
+      path: { pid },
+    });
   }
 
   /**
@@ -114,30 +83,13 @@ export class Bash implements BashInterface {
    * @throws Error if listing fails
    */
   async listManagedProcesses(): Promise<ProcessInfo[]> {
-    const response = await handleResponse(
-      client.bashListManagedProcesses().catch((error) => {
-        console.error(error);
-        throw new Error(`Failed to list managed processes: ${error.message}`);
-      })
-    );
+    const response = await client.listManagedProcesses();
 
-    return response?.processes || [];
-  }
+    if (!response.data) {
+      throw new Error('Failed to list managed processes');
+    }
 
-  /**
-   * List all system processes
-   * @returns Promise with list of system processes
-   * @throws Error if listing fails
-   */
-  async listSystemProcesses(): Promise<ProcessInfo[]> {
-    const response = await handleResponse(
-      client.bashListSystemProcesses().catch((error) => {
-        console.error(error);
-        throw new Error(`Failed to list system processes: ${error.message}`);
-      })
-    );
-
-    return response?.processes || [];
+    return response.data as ProcessInfo[];
   }
 
   /**
@@ -145,24 +97,8 @@ export class Bash implements BashInterface {
    * @throws Error if restart fails
    */
   async restart(): Promise<void> {
-    await handleResponse(
-      client.bashRestartSystem({
-        body: {},
-      })
-    );
-  }
-
-  /**
-   * Formats the output string, showing first and last 500 characters for long outputs
-   * @param output The output string to format
-   * @returns Formatted output string, with "..." in the middle if truncated
-   */
-  private formatOutput(output: string): string {
-    if (output.length <= 1000) {
-      return output;
-    }
-    const start = output.slice(0, 500);
-    const end = output.slice(-500);
-    return `${start}\n...\n${end}`;
+    await client.restartSystem({
+      body: {},
+    });
   }
 }

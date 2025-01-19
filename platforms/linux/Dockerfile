@@ -23,6 +23,9 @@ RUN apt-get update && \
     python3-dev \
     python3-xlib \
     gnome-screenshot \
+    # Keychain requirements
+    pass \
+    gpg \
     # Python/pyenv reqs
     build-essential \
     libssl-dev  \
@@ -70,6 +73,12 @@ ENV USERNAME=computeruse
 ENV HOME=/home/$USERNAME
 RUN useradd -m -s /bin/bash -d $HOME $USERNAME
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+# setup gpg directory structure
+RUN mkdir -p $HOME/.gnupg && \
+    chown -R $USERNAME:$USERNAME $HOME/.gnupg && \
+    chmod 700 $HOME/.gnupg
+
 USER computeruse
 WORKDIR $HOME
 
@@ -98,6 +107,8 @@ RUN python -m pip install --upgrade pip==23.1.2 setuptools==58.0.4 wheel==0.40.0
 # setup desktop env & app
 COPY --chown=$USERNAME:$USERNAME image/ $HOME
 COPY --chown=$USERNAME:$USERNAME api/ $HOME
+
+RUN chmod +x $HOME/entrypoint.sh $HOME/init_keychain.sh
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
 

@@ -3,6 +3,7 @@ import { Keyboard } from './keyboard';
 import { Display } from './display';
 import { Bash } from './bash';
 import { Editor } from './editor';
+import { Keychain } from './keychain';
 
 /**
  * Configuration options for the system client
@@ -223,6 +224,55 @@ export interface BashInterface {
   listManagedProcesses(): Promise<ProcessInfo[]>;
 }
 
+export interface KeychainItem {
+  username?: string;
+  password?: string;
+  token?: string;
+  email?: string;
+  phone?: string;
+  otp?: string;
+}
+
+export interface AuthElement {
+  /** Type of the auth element */
+  type: keyof KeychainItem;
+  /** Coordinates of the auth element */
+  coordinates: {
+    x: number;
+    y: number;
+  };
+}
+
+export interface AuthenticateParams {
+  /** Service to authenticate */
+  service: string;
+  /** AuthElement to fill */
+  authElements: AuthElement[];
+}
+
+export interface SetItemParams {
+  /** Service to set */
+  service: string;
+  /** Item to set */
+  item: KeychainItem;
+}
+
+export interface DeleteItemParams {
+  /** Service to delete */
+  service: string;
+}
+
+export interface KeychainInterface {
+  /** Set a keychain item */
+  setItem(params: SetItemParams): Promise<void>;
+  /** Delete a keychain item */
+  deleteItem(params: DeleteItemParams): Promise<void>;
+  /** List all services in the keychain */
+  listServices(): Promise<string[]>;
+  /** authenticate a given service */
+  authenticate(params: AuthenticateParams): Promise<boolean>;
+}
+
 /**
  * Parameters for getting process output
  */
@@ -316,16 +366,18 @@ export interface EditorInterface {
  * Complete system interface combining all control interfaces for system automation
  */
 export interface SystemInterface {
-  /** Mouse control for cursor movement and clicks */
+  /** Mouse interface for cursor movement and clicks */
   mouse: Mouse;
-  /** Keyboard control for typing and key presses */
+  /** Keyboard interface for typing and key presses */
   keyboard: Keyboard;
-  /** Display control for screen operations */
+  /** Display interface for screen operations */
   display: Display;
-  /** Bash control for shell command execution */
+  /** Bash interface for shell command execution */
   bash: Bash;
-  /** Editor control for file manipulation */
+  /** Editor interface for file manipulation */
   editor: Editor;
+  /** Keychain interface for managing credentials */
+  keychain: Keychain;
 }
 
 export interface CommandResponse {

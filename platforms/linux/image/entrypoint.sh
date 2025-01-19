@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Initialize keychain
+chmod +x ./init_keychain.sh
+./init_keychain.sh
+
 ./start_all.sh
 ./novnc_startup.sh
 
