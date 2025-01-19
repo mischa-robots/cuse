@@ -5,8 +5,8 @@ import {
   SystemConfig,
   MoveParams,
   DragParams,
+  ScrollParams,
 } from './types';
-import { handleResponse } from './utils';
 
 /**
  * Mouse control implementation
@@ -21,12 +21,16 @@ export class Mouse implements MouseInterface {
    * @throws Error if getting cursor position fails
    */
   async getPosition(): Promise<Position> {
-    const response = await handleResponse(
-      client.computerGetCursorPosition({
-        body: { display_num: this.config.displayNum },
-      })
-    );
-    return response as Position;
+    const response = await client.getMousePosition({
+      query: { display_num: this.config.displayNum },
+    });
+
+    if (!response.data) {
+      throw new Error('Failed to get cursor position');
+    }
+
+    // The response data is already in {x: number, y: number} format
+    return response.data as { x: number; y: number };
   }
 
   /**
@@ -35,11 +39,9 @@ export class Mouse implements MouseInterface {
    * @throws Error if cursor movement fails
    */
   async move({ x, y }: MoveParams): Promise<void> {
-    await handleResponse(
-      client.computerMoveCursor({
-        body: { x, y, display_num: this.config.displayNum },
-      })
-    );
+    await client.moveMouse({
+      body: { x, y, display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -47,11 +49,9 @@ export class Mouse implements MouseInterface {
    * @throws Error if click operation fails
    */
   async leftClick(): Promise<void> {
-    await handleResponse(
-      client.computerLeftClick({
-        body: { display_num: this.config.displayNum },
-      })
-    );
+    await client.leftClick({
+      body: { display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -59,11 +59,9 @@ export class Mouse implements MouseInterface {
    * @throws Error if click operation fails
    */
   async rightClick(): Promise<void> {
-    await handleResponse(
-      client.computerRightClick({
-        body: { display_num: this.config.displayNum },
-      })
-    );
+    await client.rightClick({
+      body: { display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -71,11 +69,9 @@ export class Mouse implements MouseInterface {
    * @throws Error if click operation fails
    */
   async middleClick(): Promise<void> {
-    await handleResponse(
-      client.computerMiddleClick({
-        body: { display_num: this.config.displayNum },
-      })
-    );
+    await client.middleClick({
+      body: { display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -83,11 +79,9 @@ export class Mouse implements MouseInterface {
    * @throws Error if click operation fails
    */
   async doubleClick(): Promise<void> {
-    await handleResponse(
-      client.computerDoubleClick({
-        body: { display_num: this.config.displayNum },
-      })
-    );
+    await client.doubleClick({
+      body: { display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -96,10 +90,19 @@ export class Mouse implements MouseInterface {
    * @throws Error if click drag operation fails
    */
   async leftClickDrag({ x, y }: DragParams): Promise<void> {
-    await handleResponse(
-      client.computerLeftClickDrag({
-        body: { x, y, display_num: this.config.displayNum },
-      })
-    );
+    await client.dragMouse({
+      body: { x, y, display_num: this.config.displayNum },
+    });
+  }
+
+  /**
+   * Perform a mouse wheel scroll operation
+   * @param params Scroll parameters containing number of clicks
+   * @throws Error if scroll operation fails
+   */
+  async scroll({ clicks }: ScrollParams): Promise<void> {
+    await client.scrollMouse({
+      body: { clicks, display_num: this.config.displayNum },
+    });
   }
 }

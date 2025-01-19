@@ -5,7 +5,6 @@ import {
   PressKeyParams,
   TypeParams,
 } from './types';
-import { handleResponse } from './utils';
 
 /**
  * Keyboard control implementation
@@ -20,11 +19,9 @@ export class Keyboard implements KeyboardInterface {
    * @throws Error if key press operation fails
    */
   async pressKey({ key }: PressKeyParams): Promise<void> {
-    await handleResponse(
-      client.computerPressKey({
-        body: { key: key, display_num: this.config.displayNum },
-      })
-    );
+    await client.pressKey({
+      body: { key, display_num: this.config.displayNum },
+    });
   }
 
   /**
@@ -33,10 +30,8 @@ export class Keyboard implements KeyboardInterface {
    * @throws Error if typing operation fails
    */
   async type({ text }: TypeParams): Promise<void> {
-    await handleResponse(
-      client.computerTypeText({
-        body: { text, display_num: this.config.displayNum },
-      })
-    );
+    await client.typeText({
+      body: { text, display_num: this.config.displayNum },
+    });
   }
 }

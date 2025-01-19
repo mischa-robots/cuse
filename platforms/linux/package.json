@@ -1,6 +1,6 @@
 {
   "name": "@cusedev/linux",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "main": "api/main.py",
   "private": true,
   "scripts": {

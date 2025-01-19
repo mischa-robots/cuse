@@ -35,18 +35,20 @@ export class Computer<T extends Record<string, App> = {}> {
       displayNum: this.config.display.number,
       baseUrl: this.config.baseUrl,
     });
-    this.boot();
   }
 
-  private boot() {
-    Object.values(this.apps).forEach((app) => app.init(this));
-    Object.values(this.apps).forEach((app) => app.install());
-    Object.values(this.apps).forEach(
-      (app) => app.config.autoStart && app.start()
+  async boot() {
+    await Promise.all(Object.values(this.apps).map((app) => app._init(this)));
+    await Promise.all(
+      Object.values(this.apps).map((app) => app.config.autoStart && app.start())
     );
   }
 
-  public shutdown() {
-    Object.values(this.apps).forEach((app) => app.stop());
+  async setup() {
+    await Promise.all(Object.values(this.apps).map((app) => app.install()));
+  }
+
+  async shutdown() {
+    await Promise.all(Object.values(this.apps).map((app) => app.stop()));
   }
 }

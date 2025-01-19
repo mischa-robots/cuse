@@ -5,6 +5,7 @@ import { Keyboard } from './keyboard';
 import { Display } from './display';
 import { Bash } from './bash';
 import { Editor } from './editor';
+import { Keychain } from './keychain';
 /**
  * Initialize the system control interface
  * @param config System configuration options
@@ -27,6 +28,7 @@ export function initSystem(config: SystemConfig): SystemInterface {
     display: new Display(config),
     bash: new Bash(config),
     editor: new Editor(config),
+    keychain: new Keychain(config),
   };
 }
 

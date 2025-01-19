@@ -131,3 +131,6 @@ dist
 
 # Turbo
 .turbo
+
+# Quickstart
+apps/cuse-quickstart/

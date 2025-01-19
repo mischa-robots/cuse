@@ -14,10 +14,12 @@ export abstract class App {
     this.config = config;
   }
 
-  public init(computer: Computer) {
+  async _init(computer: Computer, ...args: any[]): Promise<void> {
     this.computer = computer;
+    await this.init(...args);
   }
 
+  abstract init(...args: any[]): Promise<void>;
   abstract install(): Promise<void>;
   abstract start(): Promise<void>;
   abstract stop(): Promise<void>;
