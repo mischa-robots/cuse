@@ -1,0 +1,145 @@
+name: NPM Publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/core/**'
+      - 'packages/cli/**'
+
+concurrency:
+  group: npm-publish
+
+jobs:
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    outputs:
+      core_changed: ${{ steps.changes.outputs.core }}
+      cli_changed: ${{ steps.changes.outputs.cli }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --name-only HEAD^ HEAD > changes.txt
+          echo "core=$(grep -q 'packages/core/' changes.txt && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "cli=$(grep -q 'packages/cli/' changes.txt && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+  publish-core:
+    needs: setup
+    if: needs.setup.outputs.core_changed == 'true'
+    name: Publish Core to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: packages/core
+        run: bun install
+
+      - name: Build
+        working-directory: packages/core
+        run: bun run build
+
+      - name: Bump patch version
+        working-directory: packages/core
+        run: bun x npm version patch --no-workspaces-update
+
+      - name: Commit version bump
+        working-directory: packages/core
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "Bump core patch version"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Copy README and LICENSE
+        run: |
+          cp README.md packages/core/
+          cp LICENSE packages/core/
+
+      - name: Publish to NPM
+        working-directory: packages/core
+        run: bunx npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-cli:
+    needs: setup
+    if: needs.setup.outputs.cli_changed == 'true'
+    name: Publish CLI to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: packages/cli
+        run: bun install
+
+      - name: Build
+        working-directory: packages/cli
+        run: bun run build
+
+      - name: Bump patch version
+        working-directory: packages/cli
+        run: bun x npm version patch --no-workspaces-update
+
+      - name: Commit version bump
+        working-directory: packages/cli
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "Bump cli patch version"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Copy README and LICENSE
+        run: |
+          cp README.md packages/cli/
+          cp LICENSE packages/cli/
+
+      - name: Publish to NPM
+        working-directory: packages/cli
+        run: bunx npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
