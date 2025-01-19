@@ -125,6 +125,21 @@ await computer.system.editor.insertText({
 await computer.system.editor.undoLastEdit();
 ```
 
+## Keychain
+
+The Computer class includes a `Keychain` app that allows you to manage your passwords and credentials.
+
+```typescript
+// Store credentials in keychain
+await computer.keychain.setKey('my-service', {
+  username: 'user123',
+  password: 'securepass'
+});
+
+// Load credentials from keychain
+const credentials = await computer.keychain.getKey('my-service');
+```
+
 ## Lifecycle Methods
 
 The Computer class includes methods for managing the computer's lifecycle:
