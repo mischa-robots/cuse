@@ -14,5 +14,5 @@ services:
 
 networks:
   network:
-    name: cuse-${COMPOSE_PROJECT_NAME}-network
+    name: ${COMPOSE_PROJECT_NAME}-network
     external: true
