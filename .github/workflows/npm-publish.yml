@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -58,16 +60,18 @@ jobs:
         working-directory: packages/core
         run: bun run build
 
-      - name: Bump patch version
-        working-directory: packages/core
-        run: bun x npm version patch --no-workspaces-update
-
-      - name: Commit version bump
-        working-directory: packages/core
+      - name: Configure Git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+
+      - name: Bump patch version and push
+        working-directory: packages/core
+        run: |
+          git pull origin main
+          bun x npm version patch --no-workspaces-update
           git commit -am "Bump core patch version"
+          git pull --rebase origin main
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -100,6 +104,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -114,16 +120,18 @@ jobs:
         working-directory: packages/cli
         run: bun run build
 
-      - name: Bump patch version
-        working-directory: packages/cli
-        run: bun x npm version patch --no-workspaces-update
-
-      - name: Commit version bump
-        working-directory: packages/cli
+      - name: Configure Git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+
+      - name: Bump patch version and push
+        working-directory: packages/cli
+        run: |
+          git pull origin main
+          bun x npm version patch --no-workspaces-update
           git commit -am "Bump cli patch version"
+          git pull --rebase origin main
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
