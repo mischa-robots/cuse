@@ -35,16 +35,23 @@ export async function setupProxy(): Promise<void> {
   const dockerComposePath = path.join(templateDir, 'docker-compose.yml');
   const nginxConfPath = path.join(templateDir, 'nginx.conf');
 
+  const networkName = `cuse-${projectName}-network`;
+
   // Ensure docker network exists
   try {
-    await execa('docker', [
-      'network',
-      'inspect',
-      `cuse-${projectName}-network`,
-    ]);
+    await execa('docker', ['network', 'inspect', networkName]);
+    console.log(`Network ${networkName} already exists.`);
   } catch {
-    console.info('Creating docker network...');
-    await execa('docker', ['network', 'create', `cuse-${projectName}-network`]);
+    console.info(`Creating docker network ${networkName}...`);
+    try {
+      await execa('docker', ['network', 'create', networkName]);
+      // Verify network was created
+      await execa('docker', ['network', 'inspect', networkName]);
+      console.log(`Network ${networkName} created successfully.`);
+    } catch (error: any) {
+      console.error(`Failed to create network ${networkName}:`, error.message);
+      throw error;
+    }
   }
 
   // Start or restart the proxy
@@ -53,7 +60,7 @@ export async function setupProxy(): Promise<void> {
   const env = {
     ...process.env,
     PROXY_PORT: port.toString(),
-    COMPOSE_PROJECT_NAME: projectName,
+    COMPOSE_PROJECT_NAME: `cuse-${projectName}`,
     NGINX_CONF_PATH: nginxConfPath,
   };
 
@@ -103,7 +110,7 @@ export async function stopProxy(): Promise<void> {
       '-f',
       dockerComposePath,
       '-p',
-      projectName,
+      `cuse-${projectName}`,
       'down',
     ]);
   } catch (error) {

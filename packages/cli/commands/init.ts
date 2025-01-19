@@ -84,12 +84,12 @@ export const initCommand: CommandModule<InitOptions> = {
       computers: [],
     };
 
-    // Set up proxy
-    await setupProxy();
-
-    // Write main config
+    // Write main config first
     writeConfig(config);
     console.info('\nInitialized cuse configuration in cuse.config.yml');
+
+    // Set up proxy after config is written
+    await setupProxy();
 
     // Check if we need to create a new computer
     const computers = getAllComputers();
