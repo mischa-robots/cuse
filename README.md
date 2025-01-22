@@ -5,10 +5,17 @@ An open-source framework for building AI agents that can interact with computers
 ## Features
 
 - **Computer Control**: Display, mouse, and keyboard interaction
+- **Authentication**: Authenticate with credentials
 - **File Operations**: View, create, and edit files
 - **Shell Access**: Execute commands and manage processes
 - **App Framework**: Build custom applications
 - **Linux Support**: Run via Docker containers
+
+## Demo
+
+Task: Check gmail inbox and send summary to {email}.
+
+https://github.com/user-attachments/assets/7b5dae0c-f558-41d0-a3df-f9369990ca2a
 
 ## Quickstart
 
@@ -57,7 +64,6 @@ Visit our [documentation](https://docs.cuse.dev) to learn more about:
 ## Roadmap
 
 - Support for other platforms
-- Authentication
 - Deployment
 - Stateful Machines
 - Reusable Workflows
