@@ -13,9 +13,9 @@ An open-source framework for building AI agents that can interact with computers
 
 ## Demo
 
-Task: Check gmail inbox and send summary to {email}.
+Task: Log in to Gmail, check your inbox, and add new leads to the spreadsheet.
 
-https://github.com/user-attachments/assets/7b5dae0c-f558-41d0-a3df-f9369990ca2a
+https://github.com/user-attachments/assets/6689d937-6d4c-4331-af8f-008486ad7f00
 
 ## Quickstart
 
