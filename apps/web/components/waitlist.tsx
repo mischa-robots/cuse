@@ -30,8 +30,9 @@ const Waitlist = () => {
             Join the waitlist
           </h3>
           <p className="mb-8 max-w-3xl text-muted-foreground lg:text-lg">
-            We are cooking up a managed service for you. Be the first to know when we launch.
-            Along the way, we'll keep you updated on our progress.
+            Join the waitlist for our open-source Operator and our EU managed service access. 
+            Due to high demand, we are limiting availability carefully.
+            Secure your spot now to receive updates and be the first to know when we launch.
           </p>
           <div className="w-full md:max-w-lg">
             <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-2 sm:flex-row">

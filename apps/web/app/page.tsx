@@ -12,8 +12,8 @@ export default function Home() {
     <main className="flex flex-col w-full">
       <Navbar />
       <Hero />
-      <Features />
       <Waitlist />
+      <Features />
       <Benefits />
       <Community />
       <Roadmap />
